@@ -1,0 +1,22 @@
+{
+  "name": "renteasy",
+  "version": "1.0.0",
+  "description": "My wicked Nuxt.js project",
+  "author": "Tejash Datta",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "firebase": "^6.6.1",
+    "firebaseui": "^4.2.0",
+    "nuxt": "^2.0.0",
+    "vue-cropperjs": "^4.0.0"
+  },
+  "devDependencies": {
+    "@nuxtjs/vuetify": "^1.9.0"
+  }
+}

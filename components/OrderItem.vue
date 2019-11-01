@@ -1,0 +1,34 @@
+<template>
+  <v-card outlined class="my-2 px-2">
+    <v-row align="center" :dense="$vuetify.breakpoint.xsOnly">
+      <v-col cols="4" sm="2">
+        <v-img :lazy-src="order.item.thumb" :aspect-ratio="4/3" style="border-radius: 5px">
+          <v-img :src="order.item.thumb" contain :aspect-ratio="4/3"></v-img>
+        </v-img>
+      </v-col>
+      <v-col>
+        <h3>{{order.item.name}}</h3>
+        {{formatDate(order.dates.start)}} - {{formatDate(order.dates.end)}}
+        <br />
+        <strong class="mr-1">₹{{order.price}} + ₹{{order.item.safety}}</strong>safety
+      </v-col>
+      <!-- <v-col cols="1" class="d-flex justify-end justify-md-center">
+                  <v-btn text icon small color="red" @click="removeOrder(order.item.id)">
+                    <v-icon>mdi-minus-circle</v-icon>
+                  </v-btn>
+      </v-col>-->
+    </v-row>
+  </v-card>
+</template>
+<script>
+import dateMethods from "~/mixins/dateMethods";
+export default {
+  props: {
+    order: {
+      type: Object,
+      required: true
+    }
+  },
+  mixins: [dateMethods]
+};
+</script>
