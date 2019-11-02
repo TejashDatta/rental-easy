@@ -6,7 +6,7 @@
           <a href="tel:+918420162430">+91 8420162430</a> /
           <a href="mail:contact@rentaleasy.in">contact@rentaleasy.in</a>
         </span>
-        <!-- <div>
+        <div>
           <v-btn
             class="social-link ml-1"
             v-for="link in socialLinks"
@@ -19,7 +19,7 @@
           >
             <v-icon>{{link.icon}}</v-icon>
           </v-btn>
-        </div>-->
+        </div>
       </div>
       <div class="d-flex justify-space-between align-center">
         <nuxt-link to="/" class="logo primary--text">RentalEasy</nuxt-link>
@@ -76,12 +76,12 @@
 import NavbarUserMixin from "~/mixins/NavbarUserMixin";
 
 export default {
-  data: () => ({
-    socialLinks: [
-      { icon: "mdi-facebook-box", href: "www.facebook.com" },
-      { icon: "mdi-instagram", href: "www.instagram.com" }
-    ]
-  }),
+  props: {
+    socialLinks: {
+      type: Array,
+      required: true
+    }
+  },
   mixins: [NavbarUserMixin],
   filters: {
     firstName: v => v.split(" ")[0]

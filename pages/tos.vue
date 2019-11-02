@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container>
     <h2>Rental Easy Terms of Service</h2>
     <h3>1. Terms</h3>
     <p>
@@ -42,5 +42,5 @@
         href="https://getterms.io/"
       >GetTerms.io</a>
     </p>
-  </div>
+  </v-container>
 </template>
