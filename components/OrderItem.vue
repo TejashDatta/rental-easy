@@ -2,9 +2,11 @@
   <v-card outlined class="my-2 px-2">
     <v-row align="center" :dense="$vuetify.breakpoint.xsOnly">
       <v-col cols="4" sm="2">
-        <v-img :lazy-src="order.item.thumb" :aspect-ratio="4/3" style="border-radius: 5px">
-          <v-img :src="order.item.thumb" contain :aspect-ratio="4/3"></v-img>
-        </v-img>
+        <BlurredThumb
+          :thumb="order.item.thumb"
+          :full="order.item.thumb"
+          style="border-radius: 5px"
+        />
       </v-col>
       <v-col>
         <h3>{{order.item.name}}</h3>
@@ -21,6 +23,7 @@
   </v-card>
 </template>
 <script>
+import BlurredThumb from "~/components/BlurredThumb";
 import dateMethods from "~/mixins/dateMethods";
 export default {
   props: {
@@ -29,6 +32,7 @@ export default {
       required: true
     }
   },
+  components: { BlurredThumb },
   mixins: [dateMethods]
 };
 </script>

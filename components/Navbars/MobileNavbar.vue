@@ -5,6 +5,10 @@
       <v-toolbar-title class="pl-0">
         <nuxt-link to="/" class="logo primary--text">Rental Easy</nuxt-link>
       </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon @click.stop="searchPanel = true">
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
     </v-app-bar>
 
     <!-- nav drawer -->
@@ -69,16 +73,22 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
+
+    <MobileSearch v-model="searchPanel" />
   </div>
 </template>
 <script>
 import { categories } from "~/constants";
 import NavbarUserMixin from "~/mixins/NavbarUserMixin";
+import MobileSearch from "~/components/Search/MobileSearch";
+
 export default {
   data: () => ({
     drawer: false,
-    categories: ["All", ...categories]
+    categories: ["All", ...categories],
+    searchPanel: false
   }),
+  components: { MobileSearch },
   mixins: [NavbarUserMixin]
 };
 </script>

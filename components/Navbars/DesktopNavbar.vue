@@ -23,16 +23,8 @@
       </div>
       <div class="d-flex justify-space-between align-center">
         <nuxt-link to="/" class="logo primary--text">RentalEasy</nuxt-link>
-        <!-- <v-text-field
-          class="mx-12"
-          label="Search"
-          rounded
-          solo
-          dense
-          hide-details
-          clearable
-          prepend-inner-icon="mdi-magnify"
-        />-->
+
+        <DesktopSearch class="flex-grow-1 flex-shrink-1" />
 
         <v-toolbar-items v-if="!currentUser" class="align-self-stretch">
           <v-btn
@@ -74,6 +66,7 @@
 </template>
 <script>
 import NavbarUserMixin from "~/mixins/NavbarUserMixin";
+import DesktopSearch from "~/components/Search/DesktopSearch";
 
 export default {
   props: {
@@ -82,6 +75,7 @@ export default {
       required: true
     }
   },
+  components: { DesktopSearch },
   mixins: [NavbarUserMixin],
   filters: {
     firstName: v => v.split(" ")[0]

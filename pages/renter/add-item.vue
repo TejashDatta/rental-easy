@@ -17,7 +17,7 @@
             label="Details"
             auto-grow
             clearable
-            counter="300"
+            counter="1000"
             rows="3"
             v-model="item.details"
             required
@@ -75,7 +75,8 @@
   </v-container>
 </template>
 <script>
-import { categories } from "~/constants";
+import algoliasearch from "algoliasearch";
+import { categories, ALGOLIA_APP_ID } from "~/constants";
 import { db, storage } from "~/plugins/firebase";
 import { mapState } from "vuex";
 export default {
@@ -111,7 +112,7 @@ export default {
     ],
     detailsRules: [
       v => !!v || "Required",
-      v => (v && v.length <= 300) || "Must be less than 300 characters"
+      v => (v && v.length <= 1000) || "Must be less than 1000 characters"
     ],
     priceRules: [
       v => !!v || "Required",
@@ -128,7 +129,10 @@ export default {
           ...this.item,
           owner: this.currentUser.uid
         })
-        .then(docRef => this.$router.push(`/items/${docRef.id}`));
+        .then(docRef => {
+          this.$router.push(`/items/${docRef.id}`);
+          this.addToAlgolia(docRef.id, this.item);
+        });
     },
     selectPicture(e) {
       this.imgSrc = null;
@@ -191,6 +195,19 @@ export default {
           });
         }
       );
+    },
+    addToAlgolia(id, item) {
+      var client = algoliasearch(
+        ALGOLIA_APP_ID,
+        "700460c655efb66b95aaf6e0649ab6e0"
+      );
+      var index = client.initIndex("re_items");
+      return index.addObject({
+        objectID: id,
+        name: item.name,
+        category: item.category,
+        thumb: item.thumb
+      });
     }
   }
 };

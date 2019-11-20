@@ -5,9 +5,7 @@
     <v-row>
       <v-col cols="12" sm="5">
         <div class="white pa-1 elevation-3">
-          <v-img :lazy-src="item.thumb" :aspect-ratio="4/3">
-            <v-img :src="item.photo" contain :aspect-ratio="4/3"></v-img>
-          </v-img>
+          <BlurredThumb :thumb="item.thumb" :full="item.photo" />
           <div class="d-flex flex-column justify-center align-center my-2">
             <v-rating
               :value="item.rating.total / item.rating.votes"
@@ -68,10 +66,11 @@ import { db } from "~/plugins/firebase";
 import DatePicker from "~/components/DatePicker";
 import Loading from "~/components/Loading";
 import Reviews from "~/components/ReviewComponents/Reviews";
+import BlurredThumb from "~/components/BlurredThumb";
 import dateMethods from "~/mixins/dateMethods";
 
 export default {
-  components: { Loading, DatePicker, Reviews },
+  components: { Loading, DatePicker, Reviews, BlurredThumb },
   data: () => ({
     item: null,
     loading: false,

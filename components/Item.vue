@@ -4,9 +4,7 @@
       <v-card-title class="subtitle-1 px-2 py-1" style="word-break: break-word">
         <nuxt-link :to="link">{{item.name}}</nuxt-link>
       </v-card-title>
-      <v-img :lazy-src="item.thumb" :aspect-ratio="4/3">
-        <v-img :src="item.thumb" contain :aspect-ratio="4/3"></v-img>
-      </v-img>
+      <BlurredThumb :thumb="item.thumb" :full="item.thumb" />
       <v-card-text>
         Starting at
         <strong>₹{{item.prices.daily}}</strong>
@@ -15,6 +13,7 @@
   </nuxt-link>
 </template>
 <script>
+import BlurredThumb from "~/components/BlurredThumb";
 export default {
   props: {
     item: {
@@ -22,6 +21,7 @@ export default {
       required: true
     }
   },
+  components: { BlurredThumb },
   computed: {
     link() {
       return { name: "items-id", params: { id: this.item.id } };

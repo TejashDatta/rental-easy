@@ -11,6 +11,8 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "algoliasearch": "^3.35.1",
+    "debounce": "^1.2.0",
     "firebase": "^6.6.1",
     "firebaseui": "^4.2.0",
     "nuxt": "^2.0.0",
