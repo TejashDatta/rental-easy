@@ -2,12 +2,12 @@
   <nuxt-link :to="link">
     <v-card outlined class="zoom">
       <v-card-title class="subtitle-1 px-2 py-1" style="word-break: break-word">
-        <nuxt-link :to="link">{{item.name}}</nuxt-link>
+        <nuxt-link :to="link">{{ item.name }}</nuxt-link>
       </v-card-title>
-      <BlurredThumb :thumb="item.thumb" :full="item.thumb" />
+      <BlurredThumb :thumb="item.thumb" :full="item.photo" />
       <v-card-text>
         Starting at
-        <strong>₹{{item.prices.daily}}</strong>
+        <strong>₹{{ item.prices.daily }}</strong>
       </v-card-text>
     </v-card>
   </nuxt-link>
@@ -18,15 +18,15 @@ export default {
   props: {
     item: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   components: { BlurredThumb },
   computed: {
     link() {
       return { name: "items-id", params: { id: this.item.id } };
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
