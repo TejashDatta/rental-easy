@@ -6,6 +6,7 @@
   </v-container>
 </template>
 <script>
+import AuthGuardMixin from "~/mixins/AuthGuardMixin";
 import Loading from "~/components/Loading";
 import OrderItem from "~/components/OrderItem";
 import { db } from "~/plugins/firebase";
@@ -15,6 +16,7 @@ export default {
     orders: [],
     loading: true
   }),
+  mixins: [AuthGuardMixin],
   components: { OrderItem, Loading },
   computed: mapState("user", ["currentUser"]),
   created() {

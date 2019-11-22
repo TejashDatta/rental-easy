@@ -16,6 +16,10 @@ import "firebaseui/dist/firebaseui.css";
 import { auth } from "~/plugins/firebase";
 
 export default {
+  beforeRouteEnter(to, from, next) {
+    if (auth.currentUser) next(false);
+    else next();
+  },
   mounted() {
     let uiConfig = {
       signInOptions: [

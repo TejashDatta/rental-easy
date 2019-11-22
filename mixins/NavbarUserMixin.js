@@ -6,7 +6,7 @@ export default {
     signOut() {
       auth.signOut();
       this.$store.commit("user/setCurrentUser", null);
-      this.$store.commit("user/setUserProfile", null);
+      this.$store.commit("user/setProfile", null);
     },
   },
   computed: mapState("user", ["currentUser", "userProfile"]),

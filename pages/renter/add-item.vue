@@ -75,11 +75,13 @@
   </v-container>
 </template>
 <script>
+import AuthGuardMixin from "~/mixins/AuthGuardMixin";
 import algoliasearch from "algoliasearch";
 import { categories, ALGOLIA_APP_ID } from "~/constants";
 import { db, storage } from "~/plugins/firebase";
 import { mapState } from "vuex";
 export default {
+  mixins: [AuthGuardMixin],
   computed: mapState("user", ["currentUser"]),
   data: () => ({
     categories: [...categories, "Other"],

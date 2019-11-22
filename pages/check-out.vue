@@ -89,7 +89,9 @@ import { mapState, mapMutations } from "vuex";
 import OrderItem from "~/components/OrderItem";
 import AddAddressDialog from "~/components/AddAddressDialog";
 import UpdateNumber from "~/components/UpdateNumber";
+import AuthGuardMixin from "~/mixins/AuthGuardMixin";
 export default {
+  mixins: [AuthGuardMixin],
   components: { OrderItem, AddAddressDialog, UpdateNumber },
   data: () => ({
     step: 1,

@@ -8,7 +8,7 @@ export default {
   head: {
     // titleTemplate: "%s - " + process.env.npm_package_name,
     // title: process.env.npm_package_name || "",
-    titleTemplate: "%s - " + "Rental Easy",
+    // titleTemplate: "%s - " + "Rental Easy",
     title: "Rental Easy",
     meta: [
       { charset: "utf-8" },
