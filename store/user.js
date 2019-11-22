@@ -58,10 +58,11 @@ export const actions = {
   },
 
   initProfile({ commit, dispatch, state }) {
-    let initProfile = {
+    var initProfile = {
       name: state.currentUser.displayName,
       addresses: [],
       number: null,
+      photo: {},
     };
     const done = () => {
       commit("setProfile", initProfile);

@@ -4,7 +4,7 @@
       <div class="d-flex justify-space-between align-center">
         <span class="caption">
           <a href="tel:+918420162430">+91 8420162430</a> /
-          <a href="mail:contact@rentaleasy.in">contact@rentaleasy.in</a>
+          <a href="mailto:contact@rentaleasy.in">contact@rentaleasy.in</a>
         </span>
         <div>
           <v-btn
