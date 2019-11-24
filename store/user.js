@@ -91,9 +91,8 @@ export const actions = {
       img.crossOrigin = "Anonymous";
       img.src = state.currentUser.photoURL;
     } else {
-      //TODO set default dp
       const defaultURL =
-        "https://firebasestorage.googleapis.com/v0/b/bansheevocab.appspot.com/o/profilePictures%2Fdefault.png?alt=media&token=086d0eb0-2024-47b5-a2b0-34baa4682500";
+        "https://firebasestorage.googleapis.com/v0/b/rental-easy.appspot.com/o/defaultProfilePicture.png?alt=media&token=5c77a041-75d2-4532-ae33-84b40d893a5b";
       initProfile.photo = {
         full: defaultURL,
         thumb: defaultURL,
