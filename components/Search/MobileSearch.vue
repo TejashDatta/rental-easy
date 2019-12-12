@@ -10,10 +10,11 @@
           label="Search"
           hide-details
           clearable
+          clear-icon="mdi-refresh"
           prepend-inner-icon="mdi-magnify"
           v-model="query"
         />
-        <v-btn icon @click="close" color="red">
+        <v-btn icon @click="close">
           <v-icon>mdi-close</v-icon>
         </v-btn>
       </div>

@@ -1,7 +1,10 @@
 <template>
   <div v-if="query && !results.length" class="my-3 d-flex justify-center">
     <v-progress-circular v-if="loading" indeterminate size="30" width="3" color="primary" />
-    <span v-else>No results found</span>
+    <div v-else>
+      <p class="text-center">No results found</p>
+      <RequestItem />
+    </div>
   </div>
   <div v-else>
     <nuxt-link v-for="result in results" :key="result.objectID" :to="`/items/${result.objectID}`">
@@ -35,7 +38,7 @@ export default {
   props: {
     query: String
   },
-  components: { BlurredThumb },
+  components: { BlurredThumb, RequestItem: () => import("./RequestItem") },
   data: () => ({
     results: [],
     loading: false
