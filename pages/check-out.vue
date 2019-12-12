@@ -4,9 +4,13 @@
     <v-col cols="12" md="6">
       <v-stepper v-model="step" alt-labels class="elevation-2">
         <v-stepper-header class="elevation-0">
-          <v-stepper-step :complete="true" editable step="1">Cart</v-stepper-step>
+          <v-stepper-step :complete="true" editable step="1"
+            >Cart</v-stepper-step
+          >
           <v-divider></v-divider>
-          <v-stepper-step :complete="step > 1" :editable="step > 1" step="2">Delivery Address</v-stepper-step>
+          <v-stepper-step :complete="step > 1" :editable="step > 1" step="2"
+            >Delivery Address</v-stepper-step
+          >
           <v-divider></v-divider>
           <v-stepper-step step="3">Payment</v-stepper-step>
         </v-stepper-header>
@@ -23,7 +27,7 @@
 
           <v-stepper-content step="2">
             <h2 class="mb-4">Delivery and Contact Information</h2>
-            <p class="red--text">{{error}}</p>
+            <p class="red--text">{{ error }}</p>
             <h3>Contact Number</h3>
             <v-row>
               <v-col cols="12" sm="6">
@@ -39,12 +43,16 @@
                 v-for="(address, i) in userProfile.addresses"
                 :key="address.address"
               >
-                <v-card outlined @click="selectedAddress = i" style="height: 100%">
+                <v-card
+                  outlined
+                  @click="selectedAddress = i"
+                  style="height: 100%"
+                >
                   <v-progress-linear :value="selectedAddress == i ? 100 : 0" />
                   <div class="py-2 px-4">
-                    <strong>{{address.name}}</strong>
-                    <p style="white-space: pre-line;">{{address.address}}</p>
-                    Kolkata: {{address.pin}}
+                    <strong>{{ address.name }}</strong>
+                    <p style="white-space: pre-line;">{{ address.address }}</p>
+                    Kolkata: {{ address.pin }}
                   </div>
                 </v-card>
               </v-col>
@@ -68,12 +76,19 @@
         <v-card-title class="subtitle">Order Summary</v-card-title>
         <v-card-text>
           <v-row v-for="order in orders" :key="order.item.id">
-            <v-col cols="6">{{order.item.name}}</v-col>
-            <v-col cols="6" class="text-right">₹{{order.price}}</v-col>
+            <v-col cols="6">{{ order.item.name }}</v-col>
+            <v-col cols="6" class="text-right">₹{{ order.price }}</v-col>
             <v-col cols="6">Safety fee</v-col>
-            <v-col cols="6" class="text-right">₹{{order.item.safety}}</v-col>
+            <v-col cols="6" class="text-right">₹{{ order.item.safety }}</v-col>
           </v-row>
-          <v-btn block tile depressed color="primary" @click="proceed" :loading="loading">
+          <v-btn
+            block
+            tile
+            depressed
+            color="primary"
+            @click="proceed"
+            :loading="loading"
+          >
             <v-icon left>mdi-arrow-right-bold</v-icon>
             <span v-if="step < 3">Proceed</span>
             <span v-else>Confirm</span>
@@ -84,6 +99,7 @@
   </v-row>
 </template>
 <script>
+import emailjs from "emailjs-com";
 import { db } from "~/plugins/firebase";
 import { mapState, mapMutations } from "vuex";
 import OrderItem from "~/components/OrderItem";
@@ -97,17 +113,17 @@ export default {
     step: 1,
     selectedAddress: 0,
     error: "",
-    loading: false
+    loading: false,
   }),
   computed: {
     ...mapState("user", ["currentUser", "userProfile"]),
-    ...mapState("cart", ["orders"])
+    ...mapState("cart", ["orders"]),
   },
   methods: mapMutations("cart", ["removeOrder"]),
   watch: {
     userProfile(nv, ov) {
       if (nv.addresses.length !== ov.addresses.length) this.selectedAddress = 0;
-    }
+    },
     // orders(nv, ov) {
     //   if (!nv.length) this.$router.go(-1);
     // }
@@ -134,17 +150,28 @@ export default {
       var order = { ...this.orders[0] };
       order.user = {
         id: this.currentUser.uid,
-        number: this.userProfile.number
+        number: this.userProfile.number,
       };
       order.address = this.userProfile.addresses[this.selectedAddress];
       db.collection("orders")
         .add(order)
         .then(() => {
+          var service_id = "default_service";
+          var template_id = "order";
+          var user_id = "user_zSzIB9zBoeBVYMDVizcSk";
+          delete order.item.thumb;
+          emailjs.send(
+            service_id,
+            template_id,
+            { message_html: JSON.stringify(order) },
+            user_id
+          );
+
           this.$router.push("/user/orders/");
           this.$store.commit("cart/clearCart");
         });
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
