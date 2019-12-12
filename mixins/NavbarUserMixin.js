@@ -13,7 +13,12 @@ export default {
   data: () => ({
     userLinks: [
       // { icon: 'mdi-account', to: '/user/profile', label: 'My Profile'},
-      { icon: "mdi-view-list", to: "/user/orders", label: "My Orders" },
+      { icon: "mdi-view-list", to: "/user/orders", label: "My orders" },
+      {
+        icon: "mdi-view-grid-plus",
+        to: "/renter/add-item",
+        label: "List my item",
+      },
     ],
   }),
 };

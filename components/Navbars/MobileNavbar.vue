@@ -1,12 +1,12 @@
 <template>
   <div>
-    <v-app-bar color="background" app>
-      <v-app-bar-nav-icon @click="drawer = !drawer" />
+    <v-app-bar class="grad" app>
+      <v-app-bar-nav-icon @click="drawer = !drawer" color="white" />
       <v-toolbar-title class="pl-0">
-        <nuxt-link to="/" class="logo primary--text">Rental Easy</nuxt-link>
+        <nuxt-link to="/" class="logo white--text">Rental Easy</nuxt-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn icon @click.stop="searchPanel = true">
+      <v-btn icon @click.stop="searchPanel = true" color="white">
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
     </v-app-bar>
@@ -72,6 +72,20 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+
+      <template v-slot:append>
+        <v-divider />
+        <div class="pa-2">
+          <span class="grey--text text-darken-2 text-center d-block text-center mb-2">Contact us</span>
+          <a href="tel:+918420162430" class="primary--text">
+            <v-icon small color="primary" class="mr-1">mdi-phone</v-icon>+91 8420162430
+          </a>
+          <br />
+          <a href="mailto:contact@rentaleasy.in" class="primary--text">
+            <v-icon small color="primary" class="mr-1">mdi-email</v-icon>contact@rentaleasy.in
+          </a>
+        </div>
+      </template>
     </v-navigation-drawer>
 
     <MobileSearch v-model="searchPanel" />
@@ -85,10 +99,20 @@ import MobileSearch from "~/components/Search/MobileSearch";
 export default {
   data: () => ({
     drawer: false,
-    categories: ["All", ...categories],
+    categories: categories,
     searchPanel: false
   }),
   components: { MobileSearch },
   mixins: [NavbarUserMixin]
 };
 </script>
+<style scoped>
+.grad {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    to bottom right,
+    rgba(13, 71, 161, 1) 0%,
+    rgba(3, 169, 244, 1) 100%
+  );
+}
+</style>

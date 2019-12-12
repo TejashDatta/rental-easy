@@ -21,7 +21,7 @@
       </v-col>
       <v-col>
         <h2>Details</h2>
-        <p>{{item.details}}</p>
+        <p class="body-2">{{item.details}}</p>
         <v-divider />
         <h2>Rent Now</h2>
         <div class="grey lighten-2 mt-2 pa-2">
@@ -134,7 +134,6 @@ export default {
 };
 </script>
 <style scoped>
-h1,
 h2 {
   font-weight: normal !important;
 }

@@ -1,5 +1,5 @@
 <template>
-  <v-img :lazy-src="thumb" :aspect-ratio="4/3">
+  <v-img :lazy-src="thumb" :aspect-ratio="4/3" class="d-flex align-center">
     <v-img :src="full" contain :aspect-ratio="4/3"></v-img>
   </v-img>
 </template>

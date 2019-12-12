@@ -2,11 +2,11 @@
   <Loading v-if="loading && !items.length" />
   <v-container v-else>
     <v-row>
-      <v-col cols="3" v-if="$vuetify.breakpoint.mdAndUp">
+      <!-- <v-col cols="3" v-if="$vuetify.breakpoint.mdAndUp">
         <FilterPanel :curCategory="category" />
-      </v-col>
+      </v-col>-->
       <v-col>
-        <h2 class="font-weight-regular">{{category}}</h2>
+        <h2>{{category}}</h2>
         <div>
           <v-row>
             <v-col cols="6" md="4" lg="3" v-for="item in items" :key="item.id">
@@ -46,7 +46,10 @@ export default {
   methods: {
     loadCategory() {
       this.items = [];
-      this.q = db.collection("items").limit(this.limit);
+      this.q = db
+        .collection("items")
+        .where("show", "==", true)
+        .limit(this.limit);
       if (this.category !== "All")
         this.q = this.q.where("category", "==", this.category);
       this.nextPage();
@@ -74,6 +77,7 @@ export default {
     }
   },
   created() {
+    if (this.$route.query.cat) this.category = this.$route.query.cat;
     this.loadCategory();
   }
 };
