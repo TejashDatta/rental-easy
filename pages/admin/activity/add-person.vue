@@ -1,16 +1,26 @@
 <template>
   <v-container>
-    <h1>Add Item</h1>
+    <h1>Add Person</h1>
     <v-form v-model="valid">
       <v-row>
         <v-col cols="12" sm="6">
-          <h2>Item details</h2>
+          <h2>Person details</h2>
           <v-text-field label="Name" required v-model="item.name" :rules="nameRules"></v-text-field>
+          <v-text-field label="Age" required v-model="item.person.age" :rules="priceRules"></v-text-field>
           <v-autocomplete
-            label="Category"
+            label="Gender"
             required
-            :items="categories"
-            v-model="item.category"
+            :items="['male', 'female', 'LGBTQ']"
+            v-model="item.person.gender"
+            :rules="required"
+          />
+          <v-autocomplete
+            label="Activity"
+            required
+            :items="activities"
+            multiple
+            chips
+            v-model="item.activities"
             :rules="required"
           ></v-autocomplete>
           <v-textarea
@@ -23,6 +33,9 @@
             required
             :rules="detailsRules"
           ></v-textarea>
+        </v-col>
+
+        <v-col cols="12" sm="6">
           <h3 class="mb-2">Add a Picture</h3>
           <input ref="fileInput" type="file" accept="image/png, image/jpeg" @change="selectPicture" />
           <br />
@@ -37,14 +50,6 @@
               </template>
             </v-img>
           </div>
-
-          <div v-if="$vuetify.breakpoint.xs">
-            <br />
-            <v-divider></v-divider>
-          </div>
-        </v-col>
-        <v-col cols="12" sm="6">
-          <h2 class="mb-2">Price details</h2>
           <h3>Rent Prices</h3>
           <v-row>
             <v-col v-for="(value, name) in item.prices" :key="name" class="py-0">
@@ -54,12 +59,6 @@
               </v-text-field>
             </v-col>
           </v-row>
-          <div class="d-flex align-center">
-            <strong class="mr-2">Safety deposit charged:</strong>
-            <v-text-field label="Safety Fee" required v-model="item.safety" :rules="priceRules">
-              <span slot="prepend" class="mt-1">₹</span>
-            </v-text-field>
-          </div>
           <div class="d-flex justify-center mt-4">
             <v-btn
               :disabled="!valid || !item.photo"
@@ -78,33 +77,35 @@
 import AuthGuardMixin from "~/mixins/AuthGuardMixin";
 import firebase from "firebase/app";
 import "firebase/firestore";
-import { categories } from "~/constants";
+import { categories, activities } from "~/constants";
 import { db, storage } from "~/plugins/firebase";
 import { mapState } from "vuex";
 export default {
   mixins: [AuthGuardMixin],
   computed: mapState("user", ["currentUser"]),
   data: () => ({
-    categories: categories.filter(cat => cat != "Activity Sessions"),
+    activities: [...activities],
     valid: false,
     item: {
+      activities: [],
       name: null,
       details: null,
-      category: null,
+      category: 'person',
       prices: {
-        daily: null,
-        weekly: null,
-        monthly: null
+        session: null
       },
       photo: null,
       thumb: null,
-      safety: null,
       blockedDates: [],
       rating: {
         total: 0,
         votes: 0
       },
-      show: false,
+      person: {
+        age: null,
+        gender: null
+      },
+      show: true,
       addedOn: firebase.firestore.FieldValue.serverTimestamp()
     },
     imgSrc: null,
@@ -135,7 +136,8 @@ export default {
           owner: this.currentUser.uid
         })
         .then(docRef => {
-          this.$router.push(`/items/${docRef.id}`);
+          this.$router.push("/admin");
+          // this.addToAlgolia(docRef.id, this.item);
         });
     },
     selectPicture(e) {
@@ -183,9 +185,7 @@ export default {
       }
     },
     upload(file) {
-      const storageRef = storage.ref(
-        `${this.currentUser.uid}/items/${file.name}`
-      );
+      const storageRef = storage.ref(`activity-persons/${file.name}`);
       var task = storageRef.put(file);
 
       task.on(
@@ -199,6 +199,19 @@ export default {
           });
         }
       );
+    },
+    addToAlgolia(id, item) {
+      var client = algoliasearch(
+        ALGOLIA_APP_ID,
+        "700460c655efb66b95aaf6e0649ab6e0"
+      );
+      var index = client.initIndex("re_items");
+      return index.addObject({
+        objectID: id,
+        name: item.name,
+        category: item.category,
+        thumb: item.thumb
+      });
     }
   }
 };

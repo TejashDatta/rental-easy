@@ -34,7 +34,9 @@ export default {
         signInSuccessWithAuthResult: authResult => {
           this.$store.commit("user/setCurrentUser", authResult.user);
           this.$store.dispatch("user/getProfile");
-          const { rdr } = this.$route.query;
+          let { rdr } = this.$route.query;
+          if (!rdr)
+            rdr = '/'
           this.$router.push(rdr);
           return false;
         }

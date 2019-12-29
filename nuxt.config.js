@@ -12,6 +12,7 @@ export default {
     title: "Rental Easy",
     meta: [
       { charset: "utf-8" },
+      { name: "theme-color", content: "#0d47a1" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       {
         hid: "description",

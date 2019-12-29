@@ -28,6 +28,7 @@
           New in
           <span class="accent--text">{{cat}}</span>
         </h3>
+        <ActivityTutorial v-if="cat == 'Activity Sessions'"/>
         <v-row>
           <v-col cols="6" sm="4" md="3" v-for="item in items" :key="item.id">
             <Item :item="item" />
@@ -43,11 +44,12 @@
 
 <script>
 import Item from "~/components/Item";
+import ActivityTutorial from '~/components/ActivityTutorial'
 import { db } from "~/plugins/firebase";
 import { categories } from "~/constants";
 
 export default {
-  components: { Item },
+  components: { Item, ActivityTutorial },
   data: () => ({
     slideLinks: [
       "/items",

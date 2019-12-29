@@ -10,9 +10,11 @@
       </v-col>
       <v-col>
         <h3>{{order.item.name}}</h3>
-        {{formatDate(order.dates.start)}} - {{formatDate(order.dates.end)}}
+        <span v-if="!order.person">
+        {{formatDate(order.dates.start)}} - {{formatDate(order.dates.end)}}</span>
+        <span v-else>{{order.startTime}} on {{order.dates}}</span>
         <br />
-        <strong class="mr-1">₹{{order.price}} + ₹{{order.item.safety}}</strong>safety
+        <strong class="mr-1">₹{{order.price}}</strong> <span v-if='order.item.safety'>+ <strong>₹{{order.item.safety}}</strong>safety</span>
       </v-col>
       <!-- <v-col cols="1" class="d-flex justify-end justify-md-center">
                   <v-btn text icon small color="red" @click="removeOrder(order.item.id)">

@@ -25,7 +25,7 @@
         <v-divider />
         <h2>Rent Now</h2>
         <div class="grey lighten-2 mt-2 pa-2">
-          <div class="d-flex justify-space-between">
+          <div class="d-flex justify-space-between" v-if="!item.person">
             <div
               class="grey lighten-4 pa-4 ma-2 text-center flex-grow-1"
               v-for="priceLabel in priceLabels"
@@ -36,7 +36,18 @@
               <span class="text-capitalize">{{priceLabel}}</span>
             </div>
           </div>
-          <div class="mx-4 mt-6 mb-2">
+
+            <div v-if="item.person"
+              class="grey lighten-4 pa-4 ma-2 text-center"
+            >
+            <span class="headline">₹{{item.prices.session}}</span>
+              <br />
+              <span>per 30 minute slot</span>
+            </div>
+
+
+
+          <div class="mx-4 mt-6 mb-2" v-if="!item.person">
             <DatePicker :dates.sync="dates" :blockedDates="item.blockedDates" />
             <v-btn
               block
@@ -48,6 +59,62 @@
               @click="rent"
             >
               <v-icon left>mdi-truck</v-icon>Rent
+            </v-btn>
+          </div>
+
+          <div class="mx-4 mt-6 mb-2"  v-if="item.person">
+            <v-menu
+              ref="menu"
+              v-model="person.menu"
+              :close-on-content-click="false"
+              :close-on-click="false"
+              transition="scale-transition"
+              offset-y
+              min-width="290px"
+            >
+            <template v-slot:activator="{ on }">
+              <v-text-field
+                v-model="person.date"
+                label="Select booking date"
+                prepend-icon="mdi-calendar-range"
+                readonly
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker v-model="person.date" no-title scrollable>
+              <v-spacer></v-spacer>
+              <v-btn text color="red" @click="person.menu = false">Cancel</v-btn>
+              <v-btn text color="green" @click="person.menu = false">OK</v-btn>
+            </v-date-picker>
+          </v-menu>
+
+            <v-row>
+              <v-col>
+<v-text-field
+                v-model="person.sessions"
+                label="No. of slots (Each slot is 30 mins)"
+              ></v-text-field>
+              </v-col>
+              <v-col>
+<v-text-field
+                v-model="person.startTime"
+                label="Approximate time of booking"
+                hint="eg. 3pm"
+                persistent-hint=""
+              ></v-text-field>
+              </v-col>
+            </v-row>
+            
+              
+            <v-btn
+              block
+              tile
+              depressed
+              color="primary"
+              class="mt-4"
+              @click="rent"
+            >
+              Book
             </v-btn>
           </div>
         </div>
@@ -75,7 +142,13 @@ export default {
     item: null,
     loading: false,
     priceLabels: ["daily", "weekly", "monthly"],
-    dates: []
+    dates: [],
+    person: {
+      menu: false,
+      sessions: null,
+      date: null,
+      startTime: null
+    }
   }),
   mixins: [dateMethods],
   methods: {
@@ -91,7 +164,8 @@ export default {
     calculatePrice() {
       const start = new Date(this.dates[0]),
         end = new Date(this.dates[1]);
-      var duration = (end.getTime() - start.getTime()) / (1000 * 3600 * 24) + 1,
+      var duration =
+          (end.getTime() - start.getTime()) / (1000 * 3600 * 24) + 1,
         price = 0;
       price += Math.floor(duration / 30) * this.item.prices.monthly;
       duration = duration % 30;
@@ -102,20 +176,31 @@ export default {
     },
     rent() {
       var item = this.item;
-      this.$store.dispatch("cart/addOrder", {
+      var order  = {
         item: {
           id: item.id,
           name: item.name,
           thumb: item.thumb,
           owner: item.owner,
           safety: item.safety
-        },
-        dates: {
+        }
+      }
+      if (!this.item.person) {
+        order.dates = {
           start: this.dates[0],
           end: this.dates[1]
-        },
-        price: this.calculatePrice()
-      });
+        };
+        order.price = this.calculatePrice()
+      }
+      else {
+        order.dates = this.person.date
+        order.sessions = this.person.sessions
+        order.startTime = this.person.startTime
+        order.price = this.person.sessions * this.item.prices.session
+        order.person = true
+      }
+
+      this.$store.dispatch("cart/addOrder", order);
       if (this.$store.state.user.currentUser)
         this.$router.push({ name: "check-out" });
       else

@@ -58,7 +58,9 @@ export default {
       this.$emit("update:dates", this.unsavedDates.sort());
     },
     allowedDates(date) {
-      return new Date(date) > new Date() && this.dateNotBlocked(date);
+      var dateFuture7 = new Date();
+      dateFuture7.setDate(dateFuture7.getDate() + 7);
+      return new Date(date) > dateFuture7 && this.dateNotBlocked(date);
     },
     dateNotBlocked(dateString) {
       var date = new Date(dateString);

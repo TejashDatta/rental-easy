@@ -1,46 +1,40 @@
 <template>
   <Loading v-if="loading && !items.length" />
   <v-container v-else>
-    <v-row>
-      <!-- <v-col cols="3" v-if="$vuetify.breakpoint.mdAndUp">
-        <FilterPanel :curCategory="category" />
-      </v-col>-->
-      <v-col>
-        <h2>{{category}}</h2>
-        <div>
-          <v-row>
-            <v-col cols="6" md="4" lg="3" v-for="item in items" :key="item.id">
-              <Item :item="item" />
-            </v-col>
-          </v-row>
-          <div class="d-flex justify-center mt-2">
-            <v-btn
-              v-if="canShowMore"
-              :loading="loading"
-              @click="nextPage"
-              text
-              color="primary"
-            >Show More</v-btn>
-          </div>
-        </div>
-      </v-col>
-    </v-row>
+    <h2>{{category}}</h2>
+    <ActivityTutorial v-if="category == 'Activity Sessions'"/>
+
+    <div>
+      <v-row>
+        <v-col cols="6" md="4" lg="3" v-for="item in items" :key="item.id">
+          <Item :item="item" />
+        </v-col>
+      </v-row>
+      <div class="d-flex justify-center mt-2">
+        <v-btn
+          v-if="canShowMore"
+          :loading="loading"
+          @click="nextPage"
+          text
+          color="primary"
+        >Show More</v-btn>
+      </div>
+    </div>
   </v-container>
 </template>
 <script>
 import Loading from "~/components/Loading";
-import FilterPanel from "~/components/FilterPanel";
 import Item from "~/components/Item";
 import { db } from "~/plugins/firebase";
+import { activities } from "~/constants";
 export default {
-  components: { Loading, FilterPanel, Item },
+  components: { Loading, Item, ActivityTutorial: () => import("~/components/ActivityTutorial")},
   data: () => ({
     category: "All",
     items: [],
     loading: false,
     canShowMore: true,
     limit: 20,
-    items: [],
     q: null
   }),
   methods: {
@@ -51,7 +45,10 @@ export default {
         .where("show", "==", true)
         .limit(this.limit);
       if (this.category !== "All")
-        this.q = this.q.where("category", "==", this.category);
+        if (activities.includes(this.category))
+          this.q = this.q.where("activities", "array-contains", this.category);
+        else
+          this.q = this.q.where("category", "==", this.category);
       this.nextPage();
     },
     nextPage() {

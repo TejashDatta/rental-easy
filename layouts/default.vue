@@ -9,8 +9,9 @@
       <div style="max-width: 700px; margin: auto;" class="mt-4 px-4">
         <h3 class="white--text text-center my-3">About Us</h3>
         <p
-          class="grey--text text-justify caption"
-        >Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ea consequatur sint corrupti, assumenda tempora quis dolorem excepturi commodi illum natus! Aliquam, sapiente doloremque. Laudantium voluptatum dolore eos eum officia quasi corrupti sint voluptatibus deserunt. Officia suscipit nemo quibusdam obcaecati, impedit deleniti eveniet exercitationem ipsum quo saepe molestias aliquam nesciunt. Accusantium.</p>
+          class="grey--text text-center caption"
+        >We believe in sustainability and sharing goods. Reducing consumption is a good way to start the millenial life. Rent the items which are resting on your shelves. Share your ideas with others and meet new people while trying out new things. 
+</p>
 
         <v-row justify="space-around" no-gutters>
           <v-btn

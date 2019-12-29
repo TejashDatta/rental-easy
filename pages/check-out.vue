@@ -4,13 +4,9 @@
     <v-col cols="12" md="6">
       <v-stepper v-model="step" alt-labels class="elevation-2">
         <v-stepper-header class="elevation-0">
-          <v-stepper-step :complete="true" editable step="1"
-            >Cart</v-stepper-step
-          >
+          <v-stepper-step :complete="true" editable step="1">Cart</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step :complete="step > 1" :editable="step > 1" step="2"
-            >Delivery Address</v-stepper-step
-          >
+          <v-stepper-step :complete="step > 1" :editable="step > 1" step="2">Delivery Address</v-stepper-step>
           <v-divider></v-divider>
           <v-stepper-step step="3">Payment</v-stepper-step>
         </v-stepper-header>
@@ -43,11 +39,7 @@
                 v-for="(address, i) in userProfile.addresses"
                 :key="address.address"
               >
-                <v-card
-                  outlined
-                  @click="selectedAddress = i"
-                  style="height: 100%"
-                >
+                <v-card outlined @click="selectedAddress = i" style="height: 100%">
                   <v-progress-linear :value="selectedAddress == i ? 100 : 0" />
                   <div class="py-2 px-4">
                     <strong>{{ address.name }}</strong>
@@ -78,17 +70,10 @@
           <v-row v-for="order in orders" :key="order.item.id">
             <v-col cols="6">{{ order.item.name }}</v-col>
             <v-col cols="6" class="text-right">₹{{ order.price }}</v-col>
-            <v-col cols="6">Safety fee</v-col>
-            <v-col cols="6" class="text-right">₹{{ order.item.safety }}</v-col>
+            <!-- <v-col cols="6">Safety fee</v-col>
+            <v-col cols="6" class="text-right">₹{{ order.item.safety }}</v-col> -->
           </v-row>
-          <v-btn
-            block
-            tile
-            depressed
-            color="primary"
-            @click="proceed"
-            :loading="loading"
-          >
+          <v-btn block tile depressed color="primary" @click="proceed" :loading="loading">
             <v-icon left>mdi-arrow-right-bold</v-icon>
             <span v-if="step < 3">Proceed</span>
             <span v-else>Confirm</span>
@@ -113,17 +98,17 @@ export default {
     step: 1,
     selectedAddress: 0,
     error: "",
-    loading: false,
+    loading: false
   }),
   computed: {
     ...mapState("user", ["currentUser", "userProfile"]),
-    ...mapState("cart", ["orders"]),
+    ...mapState("cart", ["orders"])
   },
   methods: mapMutations("cart", ["removeOrder"]),
   watch: {
     userProfile(nv, ov) {
       if (nv.addresses.length !== ov.addresses.length) this.selectedAddress = 0;
-    },
+    }
     // orders(nv, ov) {
     //   if (!nv.length) this.$router.go(-1);
     // }
@@ -150,7 +135,7 @@ export default {
       var order = { ...this.orders[0] };
       order.user = {
         id: this.currentUser.uid,
-        number: this.userProfile.number,
+        number: this.userProfile.number
       };
       order.address = this.userProfile.addresses[this.selectedAddress];
       db.collection("orders")
@@ -160,18 +145,16 @@ export default {
           var template_id = "order";
           var user_id = "user_zSzIB9zBoeBVYMDVizcSk";
           delete order.item.thumb;
-          emailjs.send(
-            service_id,
-            template_id,
-            { message_html: JSON.stringify(order) },
-            user_id
-          );
+          var msg = JSON.stringify(order)
+            .replace(/{/g, "\n{")
+            .replace(/,/g, ",\n");
+          emailjs.send(service_id, template_id, { message_html: msg }, user_id);
 
           this.$router.push("/user/orders/");
           this.$store.commit("cart/clearCart");
         });
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>

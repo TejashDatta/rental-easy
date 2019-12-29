@@ -3,11 +3,20 @@
     <v-card outlined class="zoom d-flex flex-column">
       <div class="position: relative;">
         <div class="shadow-heading subtitle-1 text-center px-2 pt-1 pb-8">
-          <nuxt-link :to="link" class="white--text">{{ item.name }}</nuxt-link>
+          <nuxt-link :to="link" class="white--text" v-if="!item.person">{{ item.name }}</nuxt-link>
+          <nuxt-link :to="link" class="white--text" v-else>
+            <div class="d-flex justify-space-between">
+              <div>{{symbol(item.person.gender)}}</div>
+              <div>{{item.person.age}}</div>
+            </div>
+          </nuxt-link>
         </div>
         <BlurredThumb :thumb="item.thumb" :full="item.photo" />
       </div>
-      <v-card-text class="black--text">
+      <v-card-text class="black--text" v-if="item.person">
+        <strong>₹{{ item.prices.session }}</strong> per session
+      </v-card-text>
+      <v-card-text class="black--text" v-else-if="item.category !== 'Activity Sessions'">
         Starting at
         <strong>₹{{ item.prices.daily }}</strong>
       </v-card-text>
@@ -20,17 +29,29 @@ export default {
   props: {
     item: {
       type: Object,
-      required: true,
-    },
+      required: true
+    }
   },
   components: { BlurredThumb },
   computed: {
     link() {
       if (this.item.category == "Activity Sessions")
-        return { name: "items", params: { cat: this.item.name } };
+        return { name: "items", query: { cat: this.item.name } };
       else return { name: "items-id", params: { id: this.item.id } };
-    },
+    }
   },
+  methods: {
+    symbol(gender) {
+      switch(gender){
+        case 'male':
+          return '♂️'
+        case 'female':
+          return '♀️'
+        case 'LGBTQ':
+          return '🏳️‍🌈'
+      }
+    }
+  }
 };
 </script>
 <style scoped>
