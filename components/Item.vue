@@ -37,7 +37,7 @@ export default {
     link() {
       if (this.item.category == "Activity Sessions")
         return { name: "items", query: { cat: this.item.name } };
-      else return { name: "items-id", params: { id: this.item.id } };
+      else return { name: "items-id", params: { id: this.item.id }, query: { cat: this.$route.query.cat } };
     }
   },
   methods: {

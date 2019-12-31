@@ -1,7 +1,7 @@
 <template>
   <Loading v-if="!item" />
   <v-container v-else>
-    <h1>{{item.name}}</h1>
+    <h1 v-if="!item.person">{{item.name}}</h1>
     <v-row>
       <v-col cols="12" sm="5">
         <div class="white pa-1 elevation-3">
@@ -179,13 +179,13 @@ export default {
       var order  = {
         item: {
           id: item.id,
-          name: item.name,
           thumb: item.thumb,
           owner: item.owner,
           safety: item.safety
         }
       }
       if (!this.item.person) {
+        order.item.name = item.name
         order.dates = {
           start: this.dates[0],
           end: this.dates[1]
@@ -193,11 +193,12 @@ export default {
         order.price = this.calculatePrice()
       }
       else {
+        order.item.name = this.$route.query.cat
         order.dates = this.person.date
         order.sessions = this.person.sessions
         order.startTime = this.person.startTime
         order.price = this.person.sessions * this.item.prices.session
-        order.person = true
+        order.person = item.name
       }
 
       this.$store.dispatch("cart/addOrder", order);
