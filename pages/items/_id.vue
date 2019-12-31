@@ -18,12 +18,15 @@
             <!-- <span class="secondary--text">({{item.orders}} orders)</span> -->
           </div>
         </div>
+        <p class="mt-3 ml-2">Person verified by rentaleasy</p>
       </v-col>
       <v-col>
-        <h2>Details</h2>
+        <h2 v-if="!item.person">Details</h2>
+        <h2 v-else>Bio</h2>
         <p class="body-2">{{item.details}}</p>
         <v-divider />
-        <h2>Rent Now</h2>
+        <h2 v-if="!item.person">Rent Now</h2>
+        <h2 v-else>Book Now</h2>
         <div class="grey lighten-2 mt-2 pa-2">
           <div class="d-flex justify-space-between" v-if="!item.person">
             <div
@@ -37,14 +40,17 @@
             </div>
           </div>
 
-            <div v-if="item.person"
-              class="grey lighten-4 pa-4 ma-2 text-center"
+          <div class="d-flex justify-space-between" v-if="item.person">
+            <div
+              class="grey lighten-4 pa-4 ma-2 text-center flex-grow-1"
+              v-for="(price, priceLabel) in personPrices"
+              :key="priceLabel"
             >
-            <span class="headline">₹{{item.prices.session}}</span>
+              <span class="headline">₹{{price}}</span>
               <br />
-              <span>per 30 minute slot</span>
+              <span class="text-capitalize">{{priceLabel}}</span>
             </div>
-
+          </div>
 
 
           <div class="mx-4 mt-6 mb-2" v-if="!item.person">
@@ -90,18 +96,21 @@
 
             <v-row>
               <v-col>
-<v-text-field
-                v-model="person.sessions"
-                label="No. of slots (Each slot is 30 mins)"
-              ></v-text-field>
+                <v-autocomplete
+                  label="Booking duration"
+                  required
+                  :items="['30 mins', '45 mins', '60 mins']"
+                  v-model="person.duration"
+                ></v-autocomplete>
               </v-col>
               <v-col>
-<v-text-field
-                v-model="person.startTime"
-                label="Approximate time of booking"
-                hint="eg. 3pm"
-                persistent-hint=""
-              ></v-text-field>
+                <v-text-field
+                  v-model="person.startTime"
+                  required
+                  label="Time of booking (approximate)"
+                  hint="eg. 3pm"
+                  persistent-hint
+                ></v-text-field>
               </v-col>
             </v-row>
             
@@ -142,10 +151,15 @@ export default {
     item: null,
     loading: false,
     priceLabels: ["daily", "weekly", "monthly"],
+    personPrices: {
+      '30 mins': 89,
+      '45 mins': 100,
+      '60 mins': 120
+    },
     dates: [],
     person: {
       menu: false,
-      sessions: null,
+      duration: null,
       date: null,
       startTime: null
     }
@@ -197,7 +211,7 @@ export default {
         order.dates = this.person.date
         order.sessions = this.person.sessions
         order.startTime = this.person.startTime
-        order.price = this.person.sessions * this.item.prices.session
+        order.price = this.personPrices[this.person.duration]
         order.person = item.name
       }
 

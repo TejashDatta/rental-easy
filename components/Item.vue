@@ -13,12 +13,10 @@
         </div>
         <BlurredThumb :thumb="item.thumb" :full="item.photo" />
       </div>
-      <v-card-text class="black--text" v-if="item.person">
-        <strong>₹{{ item.prices.session }}</strong> per session
-      </v-card-text>
-      <v-card-text class="black--text" v-else-if="item.category !== 'Activity Sessions'">
+      <v-card-text class="black--text" v-if="item.category !== 'Activity Sessions'">
         Starting at
-        <strong>₹{{ item.prices.daily }}</strong>
+        <strong v-if="item.person">₹89 for 30 mins</strong>
+        <strong v-else>₹{{ item.prices.daily }}</strong>
       </v-card-text>
     </v-card>
   </nuxt-link>
