@@ -15,7 +15,7 @@
             :rules="required"
           />
           <v-autocomplete
-            label="Activity"
+            label="Activities"
             required
             :items="activities"
             multiple
