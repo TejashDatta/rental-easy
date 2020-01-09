@@ -18,7 +18,7 @@
             <!-- <span class="secondary--text">({{item.orders}} orders)</span> -->
           </div>
         </div>
-        <p class="mt-3 ml-2">Person verified by rentaleasy</p>
+        <p v-if="item.person" class="mt-3 ml-2">Person verified by rentaleasy</p>
       </v-col>
       <v-col>
         <h2 v-if="!item.person">Details</h2>

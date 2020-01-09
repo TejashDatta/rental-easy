@@ -19,6 +19,7 @@
           color="primary"
         >Show More</v-btn>
       </div>
+      <BecomeParticipant v-if="category == 'Activity Sessions' || activities.includes(category)"/>
     </div>
   </v-container>
 </template>
@@ -28,14 +29,18 @@ import Item from "~/components/Item";
 import { db } from "~/plugins/firebase";
 import { activities } from "~/constants";
 export default {
-  components: { Loading, Item, ActivityTutorial: () => import("~/components/ActivityTutorial")},
+  components: { Loading, Item, 
+    ActivityTutorial: () => import("~/components/ActivityTutorial"),
+    BecomeParticipant: () => import("~/components/BecomeParticipant")
+  },
   data: () => ({
     category: "All",
     items: [],
     loading: false,
     canShowMore: true,
     limit: 20,
-    q: null
+    q: null,
+    activities,
   }),
   methods: {
     loadCategory() {
