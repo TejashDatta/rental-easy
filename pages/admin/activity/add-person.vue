@@ -74,14 +74,14 @@
   </v-container>
 </template>
 <script>
-import AuthGuardMixin from "~/mixins/AuthGuardMixin";
+import AdminRouteGuard from "~/mixins/AdminRouteGuard";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { categories, activities } from "~/constants";
 import { db, storage } from "~/plugins/firebase";
 import { mapState } from "vuex";
 export default {
-  mixins: [AuthGuardMixin],
+  mixins: [AdminRouteGuard],
   computed: mapState("user", ["currentUser"]),
   data: () => ({
     activities: [...activities],

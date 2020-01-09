@@ -12,6 +12,6 @@ import { auth } from "~/plugins/firebase";
 import AdminRouteGuard from "~/mixins/AdminRouteGuard";
 
 export default {
-  // mixins: [AdminRouteGuard]
+  mixins: [AdminRouteGuard]
 };
 </script>
