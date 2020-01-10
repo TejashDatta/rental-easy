@@ -23,6 +23,8 @@
 </template>
 <script>
 import BlurredThumb from "~/components/BlurredThumb";
+import { mapState } from "vuex";
+import { activities } from "~/constants";
 export default {
   props: {
     item: {
@@ -32,21 +34,45 @@ export default {
   },
   components: { BlurredThumb },
   computed: {
+    ...mapState("user", ["currentUser", "userProfile"]),
     link() {
+      if (
+        this.item.name == "Table Talk" &&
+        this.currentUser &&
+        !this.userProfile.talkAnswers
+      )
+        return {
+          name: "questions-talk",
+          query: { rdr: `/items/?cat=${this.item.name}` }
+        };
+      if (
+        activities.includes(this.item.name) &&
+        this.currentUser &&
+        !this.userProfile.activityAnswers
+      )
+        return {
+          name: "questions-activity",
+          query: { rdr: `/items/?cat=${this.item.name}` }
+        };
       if (this.item.category == "Activity Sessions")
         return { name: "items", query: { cat: this.item.name } };
-      else return { name: "items-id", params: { id: this.item.id }, query: { cat: this.$route.query.cat } };
+      else
+        return {
+          name: "items-id",
+          params: { id: this.item.id },
+          query: { cat: this.$route.query.cat }
+        };
     }
   },
   methods: {
     symbol(gender) {
-      switch(gender){
-        case 'male':
-          return '♂️'
-        case 'female':
-          return '♀️'
-        case 'LGBTQ':
-          return '🏳️‍🌈'
+      switch (gender) {
+        case "male":
+          return "♂️";
+        case "female":
+          return "♀️";
+        case "LGBTQ":
+          return "🏳️‍🌈";
       }
     }
   }

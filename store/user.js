@@ -2,12 +2,12 @@ import { db, auth } from "~/plugins/firebase";
 
 export const state = () => ({
   currentUser: null,
-  userProfile: null,
+  userProfile: null
 });
 
 export const mutations = {
   setCurrentUser: (state, user) => (state.currentUser = user),
-  setProfile: (state, data) => (state.userProfile = data),
+  setProfile: (state, data) => (state.userProfile = data)
 };
 
 export const actions = {
@@ -43,8 +43,24 @@ export const actions = {
     auth.currentUser.updateProfile({ photoURL });
     commit("setCurrentUser", {
       ...state.currentUser,
-      photoURL,
+      photoURL
     });
+  },
+
+  saveTalkAnswers({ commit, state }, talkAnswers) {
+    db.collection("users")
+      .doc(state.currentUser.uid)
+      .update({ talkAnswers });
+    const profile = { ...state.userProfile, talkAnswers };
+    commit("setProfile", profile);
+  },
+
+  saveActivityAnswers({ commit, state }, activityAnswers) {
+    db.collection("users")
+      .doc(state.currentUser.uid)
+      .update({ activityAnswers });
+    const profile = { ...state.userProfile, activityAnswers };
+    commit("setProfile", profile);
   },
 
   getProfile({ commit, dispatch, state }) {
@@ -62,7 +78,7 @@ export const actions = {
       name: state.currentUser.displayName,
       addresses: [],
       number: null,
-      photo: {},
+      photo: {}
     };
     const done = () => {
       commit("setProfile", initProfile);
@@ -95,10 +111,10 @@ export const actions = {
         "https://firebasestorage.googleapis.com/v0/b/rental-easy.appspot.com/o/defaultProfilePicture.png?alt=media&token=5c77a041-75d2-4532-ae33-84b40d893a5b";
       initProfile.photo = {
         full: defaultURL,
-        thumb: defaultURL,
+        thumb: defaultURL
       };
       dispatch("updateAuthPhoto", defaultURL);
       done();
     }
-  },
+  }
 };
