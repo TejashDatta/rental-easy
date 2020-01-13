@@ -53,7 +53,7 @@ export default {
     uploading: false
   }),
   computed: {
-    ...mapState(["currentUser"]),
+    ...mapState("user", ["currentUser"]),
     containerStyle() {
       return this.$vuetify.breakpoint.xs
         ? { width: "300px", height: "300px" }

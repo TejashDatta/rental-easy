@@ -52,7 +52,6 @@
             </div>
           </div>
 
-
           <div class="mx-4 mt-6 mb-2" v-if="!item.person">
             <DatePicker :dates.sync="dates" :blockedDates="item.blockedDates" />
             <v-btn
@@ -68,7 +67,7 @@
             </v-btn>
           </div>
 
-          <div class="mx-4 mt-6 mb-2"  v-if="item.person">
+          <div class="mx-4 mt-6 mb-2" v-if="item.person">
             <v-menu
               ref="menu"
               v-model="person.menu"
@@ -78,21 +77,21 @@
               offset-y
               min-width="290px"
             >
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="person.date"
-                label="Select booking date"
-                prepend-icon="mdi-calendar-range"
-                readonly
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker v-model="person.date" no-title scrollable>
-              <v-spacer></v-spacer>
-              <v-btn text color="red" @click="person.menu = false">Cancel</v-btn>
-              <v-btn text color="green" @click="person.menu = false">OK</v-btn>
-            </v-date-picker>
-          </v-menu>
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="person.date"
+                  label="Select booking date"
+                  prepend-icon="mdi-calendar-range"
+                  readonly
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker v-model="person.date" no-title scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="red" @click="person.menu = false">Cancel</v-btn>
+                <v-btn text color="green" @click="person.menu = false">OK</v-btn>
+              </v-date-picker>
+            </v-menu>
 
             <v-row>
               <v-col>
@@ -113,18 +112,8 @@
                 ></v-text-field>
               </v-col>
             </v-row>
-            
-              
-            <v-btn
-              block
-              tile
-              depressed
-              color="primary"
-              class="mt-4"
-              @click="rent"
-            >
-              Book
-            </v-btn>
+
+            <v-btn block tile depressed color="primary" class="mt-4" @click="rent">Book</v-btn>
           </div>
         </div>
         <br />
@@ -152,9 +141,9 @@ export default {
     loading: false,
     priceLabels: ["daily", "weekly", "monthly"],
     personPrices: {
-      '30 mins': 89,
-      '45 mins': 100,
-      '60 mins': 120
+      "30 mins": 89,
+      "45 mins": 100,
+      "60 mins": 120
     },
     dates: [],
     person: {
@@ -178,8 +167,7 @@ export default {
     calculatePrice() {
       const start = new Date(this.dates[0]),
         end = new Date(this.dates[1]);
-      var duration =
-          (end.getTime() - start.getTime()) / (1000 * 3600 * 24) + 1,
+      var duration = (end.getTime() - start.getTime()) / (1000 * 3600 * 24) + 1,
         price = 0;
       price += Math.floor(duration / 30) * this.item.prices.monthly;
       duration = duration % 30;
@@ -190,29 +178,28 @@ export default {
     },
     rent() {
       var item = this.item;
-      var order  = {
+      var order = {
         item: {
-          id: item.id,
-          thumb: item.thumb,
-          owner: item.owner,
-          safety: item.safety
+          id: item.id
         }
-      }
+      };
       if (!this.item.person) {
-        order.item.name = item.name
+        order.item.name = item.name;
         order.dates = {
           start: this.dates[0],
           end: this.dates[1]
         };
-        order.price = this.calculatePrice()
-      }
-      else {
-        order.item.name = this.$route.query.cat
-        order.dates = this.person.date
-        order.sessions = this.person.sessions
-        order.startTime = this.person.startTime
-        order.price = this.personPrices[this.person.duration]
-        order.person = item.name
+        order.price = this.calculatePrice();
+        order.item.thumb = item.thumb;
+        order.item.owner = item.owner;
+        order.item.safety = item.safety;
+      } else {
+        order.item.name = this.$route.query.cat;
+        order.dates = this.person.date;
+        order.duration = this.person.duration;
+        order.startTime = this.person.startTime;
+        order.price = this.personPrices[this.person.duration];
+        order.person = item.name;
       }
 
       this.$store.dispatch("cart/addOrder", order);

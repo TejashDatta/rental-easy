@@ -55,10 +55,10 @@
           </v-stepper-content>
           <v-stepper-content step="3">
             <h2 class="mb-4">Payment</h2>
-            <p>
-              All payments taken through
-              <strong>cash on delivery</strong>.
-            </p>
+            <v-radio-group v-model="payment" column mandatory required class="ml-2">
+              <v-radio label="Cash on Delivery" value="Cash"></v-radio>
+              <v-radio label="GPay/PayTM on Delivery" value="GPay/PayTM"></v-radio>
+            </v-radio-group>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
@@ -71,7 +71,7 @@
             <v-col cols="6">{{ order.item.name }}</v-col>
             <v-col cols="6" class="text-right">₹{{ order.price }}</v-col>
             <!-- <v-col cols="6">Safety fee</v-col>
-            <v-col cols="6" class="text-right">₹{{ order.item.safety }}</v-col> -->
+            <v-col cols="6" class="text-right">₹{{ order.item.safety }}</v-col>-->
           </v-row>
           <v-btn block tile depressed color="primary" @click="proceed" :loading="loading">
             <v-icon left>mdi-arrow-right-bold</v-icon>
@@ -98,7 +98,8 @@ export default {
     step: 1,
     selectedAddress: 0,
     error: "",
-    loading: false
+    loading: false,
+    payment: null
   }),
   computed: {
     ...mapState("user", ["currentUser", "userProfile"]),
@@ -135,8 +136,12 @@ export default {
       var order = { ...this.orders[0] };
       order.user = {
         id: this.currentUser.uid,
-        number: this.userProfile.number
+        email: this.currentUser.email,
+        number: this.userProfile.number,
+        talkAnswers: this.userProfile.talkAnswers,
+        activityAnswers: this.userProfile.activityAnswers
       };
+      order.payment = this.payment;
       order.address = this.userProfile.addresses[this.selectedAddress];
       db.collection("orders")
         .add(order)

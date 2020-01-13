@@ -3,7 +3,10 @@
     <v-card outlined class="zoom d-flex flex-column">
       <div class="position: relative;">
         <div class="shadow-heading subtitle-1 text-center px-2 pt-1 pb-8">
-          <nuxt-link :to="link" class="white--text" v-if="!item.person">{{ item.name }}</nuxt-link>
+          <nuxt-link :to="link" class="white--text" v-if="!item.person">
+            <strong v-if="item.name =='Radr'">NEW!</strong>
+            {{ item.name }}
+          </nuxt-link>
           <nuxt-link :to="link" class="white--text" v-else>
             <div class="d-flex justify-space-between">
               <div>{{symbol(item.person.gender)}}</div>
@@ -36,18 +39,17 @@ export default {
   computed: {
     ...mapState("user", ["currentUser", "userProfile"]),
     link() {
-      if (
-        this.item.name == "Table Talk" &&
-        this.currentUser &&
-        !this.userProfile.talkAnswers
-      )
+      if (activities.includes(this.item.name) && !this.currentUser)
         return {
-          name: "questions-talk",
-          query: { rdr: `/items/?cat=${this.item.name}` }
+          name: "auth",
+          query: { rdr: `/items/?cat=${this.item.category}` }
+        };
+      if (this.item.name == "Radr")
+        return {
+          name: "questions-talk"
         };
       if (
         activities.includes(this.item.name) &&
-        this.currentUser &&
         !this.userProfile.activityAnswers
       )
         return {

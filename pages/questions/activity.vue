@@ -5,18 +5,16 @@
   <v-container v-else>
     <h2>Tell us about yourself</h2>
     <p>Answer the questions below to help us find the people most suitable for you.</p>
-    <v-radio-group
-      v-model="answers[i]"
-      column
-      v-for="(q, i) in questions"
-      :key="q[0]"
-      class="pa-0 ma-0"
-    >
-      <span class="mb-2 ml-1">
-        <strong>{{i+1}}.</strong> I prefer
-      </span>
-      <v-radio v-for="option in q" :key="option" :label="option" :value="option"></v-radio>
-    </v-radio-group>
+    <v-row>
+      <v-col cols="6" sm="4" lg="3" v-for="(q, i) in questions" :key="q[0]">
+        <v-radio-group v-model="answers[i]" column class="pa-0 ma-0">
+          <span class="mb-2 ml-1">
+            <strong>{{i+1}}.</strong> I prefer
+          </span>
+          <v-radio v-for="option in q" :key="option" :label="option" :value="option"></v-radio>
+        </v-radio-group>
+      </v-col>
+    </v-row>
 
     <div class="d-flex justify-center">
       <v-btn
@@ -44,11 +42,9 @@ export default {
       ["Saving", "Spending"],
       ["Brutal honesty", "White lies"],
       ["TV", "Book"],
-      ["Beach", "Mountains"],
-      ["Dine in", "Delivery"],
-      ["Sweaters", "Hoodies"]
+      ["Casuals", "Formals"]
     ],
-    answers: new Array(10),
+    answers: new Array(8),
     loading: false
   }),
   methods: {
