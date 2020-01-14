@@ -4,19 +4,22 @@
       <div class="position: relative;">
         <div class="shadow-heading subtitle-1 text-center px-2 pt-1 pb-8">
           <nuxt-link :to="link" class="white--text" v-if="!item.person">
-            <strong v-if="item.name =='Radr'">NEW!</strong>
+            <strong v-if="item.name == 'Table Talk'">NEW!</strong>
             {{ item.name }}
           </nuxt-link>
           <nuxt-link :to="link" class="white--text" v-else>
             <div class="d-flex justify-space-between">
-              <div>{{symbol(item.person.gender)}}</div>
-              <div>{{item.person.age}}</div>
+              <div>{{ symbol(item.person.gender) }}</div>
+              <div>{{ item.person.age }}</div>
             </div>
           </nuxt-link>
         </div>
         <BlurredThumb :thumb="item.thumb" :full="item.photo" />
       </div>
-      <v-card-text class="black--text" v-if="item.category !== 'Activity Sessions'">
+      <v-card-text
+        class="black--text"
+        v-if="item.category !== 'Activity Sessions'"
+      >
         Starting at
         <strong v-if="item.person">₹89 for 30 mins</strong>
         <strong v-else>₹{{ item.prices.daily }}</strong>
@@ -44,7 +47,7 @@ export default {
           name: "auth",
           query: { rdr: `/items/?cat=${this.item.category}` }
         };
-      if (this.item.name == "Radr")
+      if (this.item.name == "Table Talk")
         return {
           name: "questions-talk"
         };

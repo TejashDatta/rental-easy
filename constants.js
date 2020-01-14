@@ -7,7 +7,7 @@ export const categories = [
 ];
 
 export const activities = [
-  "Radr",
+  "Table Talk",
   "Dance",
   "Mixology",
   "Sports",

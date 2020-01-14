@@ -21,9 +21,7 @@
     </v-card>
     <v-card v-else>
       <v-card-title>Become a participant</v-card-title>
-      <v-card-text
-        class="black--text"
-      >Thank you for your interest, we will get in touch with you.</v-card-text>
+      <v-card-text class="black--text">Thank you for your interest, we will get in touch with you.</v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="primary" text @click="close">Finish</v-btn>
@@ -33,6 +31,8 @@
 </template>
 <script>
 import { db } from "~/plugins/firebase";
+import emailjs from "emailjs-com";
+import { service_id, template_id, user_id } from "~/emailjsConfig";
 
 export default {
   data: () => ({
@@ -43,17 +43,23 @@ export default {
       v => (v && v.length <= 30) || "Must be less than 30 characters"
     ],
     name: null,
-    email: null,
+    email: null
   }),
   methods: {
     submit() {
+      var data = { name: this.name, email: this.email };
       db.collection("participants")
         .doc(this.name)
-        .set({name: this.name, email: this.email})
+        .set(data)
         .then(() => {
           this.$refs.form.reset();
           this.submitted = true;
         });
+
+      var msg = JSON.stringify(data)
+        .replace(/{/g, "\n{")
+        .replace(/,/g, ",\n");
+      emailjs.send(service_id, template_id, { message_html: msg }, user_id);
     },
     close() {
       this.dialog = false;

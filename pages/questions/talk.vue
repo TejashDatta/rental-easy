@@ -39,6 +39,7 @@
 import AuthGuardMixin from "~/mixins/AuthGuardMixin";
 import { mapState } from "vuex";
 import emailjs from "emailjs-com";
+import { service_id, template_id, user_id } from "~/emailjsConfig";
 
 export default {
   mixins: [AuthGuardMixin],
@@ -70,9 +71,6 @@ export default {
       };
       user.address = this.userProfile.addresses;
 
-      var service_id = "default_service";
-      var template_id = "order";
-      var user_id = "user_zSzIB9zBoeBVYMDVizcSk";
       var msg = JSON.stringify(user)
         .replace(/{/g, "\n{")
         .replace(/,/g, ",\n");
