@@ -2,7 +2,7 @@
   <v-container>
     <h2>Login / Create Account</h2>
     <p class="text-center">
-      <strong>{{$route.query.msg}}</strong>
+      <strong>{{ $route.query.msg }}</strong>
     </p>
     <div class="mt-12" id="firebaseui-auth-container" />
   </v-container>
@@ -24,8 +24,8 @@ export default {
     let uiConfig = {
       signInOptions: [
         firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.FacebookAuthProvider.PROVIDER_ID
+        firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        // firebase.auth.FacebookAuthProvider.PROVIDER_ID
       ],
       privacyPolicyUrl: "/privacy-policy",
       tosUrl: "/tos",
@@ -35,8 +35,7 @@ export default {
           this.$store.commit("user/setCurrentUser", authResult.user);
           this.$store.dispatch("user/getProfile");
           let { rdr } = this.$route.query;
-          if (!rdr)
-            rdr = '/'
+          if (!rdr) rdr = "/";
           this.$router.push(rdr);
           return false;
         }
@@ -54,4 +53,3 @@ export default {
   padding-left: 0 !important;
 }
 </style>
-
