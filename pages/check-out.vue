@@ -85,7 +85,7 @@
 </template>
 <script>
 import emailjs from "emailjs-com";
-import { service_id, template_id, user_id} from '~/emailjsConfig'
+import { service_id, template_id, user_id } from "~/emailjsConfig";
 import { db } from "~/plugins/firebase";
 import { mapState, mapMutations } from "vuex";
 import OrderItem from "~/components/OrderItem";
@@ -147,6 +147,7 @@ export default {
       db.collection("orders")
         .add(order)
         .then(() => {
+          order.subject = "Order Item/Activity";
           delete order.item.thumb;
           var msg = JSON.stringify(order)
             .replace(/{/g, "\n{")

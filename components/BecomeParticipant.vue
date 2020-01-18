@@ -47,7 +47,7 @@ export default {
   }),
   methods: {
     submit() {
-      var data = { name: this.name, email: this.email };
+      var data = { subject: 'Become participant', name: this.name, email: this.email };
       db.collection("participants")
         .doc(this.name)
         .set(data)

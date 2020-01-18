@@ -9,17 +9,13 @@
           </nuxt-link>
           <nuxt-link :to="link" class="white--text" v-else>
             <div class="d-flex justify-space-between">
-              <div>{{ symbol(item.person.gender) }}</div>
               <div>{{ item.person.age }}</div>
             </div>
           </nuxt-link>
         </div>
         <BlurredThumb :thumb="item.thumb" :full="item.photo" />
       </div>
-      <v-card-text
-        class="black--text"
-        v-if="item.category !== 'Activity Sessions'"
-      >
+      <v-card-text class="black--text" v-if="item.category !== 'Activity Sessions'">
         Starting at
         <strong v-if="item.person">₹89 for 30 mins</strong>
         <strong v-else>₹{{ item.prices.daily }}</strong>
@@ -67,18 +63,6 @@ export default {
           params: { id: this.item.id },
           query: { cat: this.$route.query.cat }
         };
-    }
-  },
-  methods: {
-    symbol(gender) {
-      switch (gender) {
-        case "male":
-          return "♂️";
-        case "female":
-          return "♀️";
-        case "LGBTQ":
-          return "🏳️‍🌈";
-      }
     }
   }
 };

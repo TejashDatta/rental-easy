@@ -75,6 +75,8 @@
   </v-container>
 </template>
 <script>
+import emailjs from "emailjs-com";
+import { service_id, template_id, user_id } from "~/emailjsConfig";
 import AuthGuardMixin from "~/mixins/AuthGuardMixin";
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -83,7 +85,7 @@ import { db, storage } from "~/plugins/firebase";
 import { mapState } from "vuex";
 export default {
   mixins: [AuthGuardMixin],
-  computed: mapState("user", ["currentUser"]),
+  computed: mapState("user", ["currentUser", "userProfile"]),
   data: () => ({
     categories: categories.filter(cat => cat != "Activity Sessions"),
     valid: false,
@@ -135,6 +137,16 @@ export default {
           owner: this.currentUser.uid
         })
         .then(docRef => {
+          var msg = { ...this.item };
+          msg.owner = {
+            email: this.currentUser.uid,
+            name: this.currentUser.name,
+            number: this.userProfile.number
+          };
+          var msg = JSON.stringify(msg)
+            .replace(/{/g, "\n{")
+            .replace(/,/g, ",\n");
+          emailjs.send(service_id, template_id, { message_html: msg }, user_id);
           this.$router.push(`/items/${docRef.id}`);
         });
     },
