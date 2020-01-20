@@ -3,41 +3,28 @@
     <v-row align="center" :dense="$vuetify.breakpoint.xsOnly">
       <v-col cols="4" sm="2">
         <BlurredThumb
-          v-if="!order.person"
           :thumb="order.item.thumb"
           :full="order.item.thumb"
           style="border-radius: 5px"
         />
-        <v-img
-          v-else
-          :lazy-src="require(`~/assets/activityImages/${order.item.name}.jpg`)"
-          :aspect-ratio="4/3"
-          class="d-flex align-center"
-        >
-          <v-img
-            :src="require(`~/assets/activityImages/${order.item.name}.jpg`)"
-            contain
-            :aspect-ratio="4/3"
-          ></v-img>
-        </v-img>
       </v-col>
       <v-col>
         <h3>{{order.item.name}}</h3>
         <span
-          v-if="!order.person"
+          v-if="!order.item.isActivity"
         >{{formatDate(order.dates.start)}} - {{formatDate(order.dates.end)}}</span>
-        <span v-else>{{order.startTime}} on {{order.dates}}</span>
+        <span v-else>{{order.date}}</span>
         <br />
         <strong class="mr-1">₹{{order.price}}</strong>
         <span v-if="order.item.safety">
           +
-          <strong>₹{{order.item.safety}}</strong>safety
+          <strong>₹{{order.item.safety}}</strong> safety
         </span>
       </v-col>
       <!-- <v-col cols="1" class="d-flex justify-end justify-md-center">
-                  <v-btn text icon small color="red" @click="removeOrder(order.item.id)">
-                    <v-icon>mdi-minus-circle</v-icon>
-                  </v-btn>
+        <v-btn text icon small color="red" @click="removeOrder(order.item.id)">
+          <v-icon>mdi-minus-circle</v-icon>
+        </v-btn>
       </v-col>-->
     </v-row>
   </v-card>

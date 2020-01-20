@@ -1,16 +1,5 @@
 <template>
-  <v-container v-if="done">
-    <div class="d-flex flex-column align-center my-12 pa-2">
-      <img src="~/assets/table_talk_logo.png" class="my-10" />
-      <v-btn big @click="book" color="pink" dark class="my-10" v-if="!booked">Book</v-btn>
-      <p class="my-10" v-if="!booked">
-        Click on book and we'll find your perfect match and get back to you
-        through email.
-      </p>
-      <p class="my-12" v-if="booked">Thank you for your interest! We'll get back to you shortly.</p>
-    </div>
-  </v-container>
-  <v-container v-else>
+  <v-container>
     <h2>Tell us about yourself</h2>
     <p class="my-8">
       Answer the questions below to help us find the people most suitable for
@@ -39,13 +28,9 @@
   </v-container>
 </template>
 <script>
-import AuthGuardMixin from "~/mixins/AuthGuardMixin";
 import { mapState } from "vuex";
-import emailjs from "emailjs-com";
-import { service_id, template_id, user_id } from "~/emailjsConfig";
 
 export default {
-  mixins: [AuthGuardMixin],
   data: () => ({
     questions: [
       { q: "Looking for:", options: ["Males", "Females", "Both"] },
@@ -63,35 +48,18 @@ export default {
   methods: {
     submit() {
       this.$store.dispatch("user/saveTalkAnswers", this.answers);
+      this.continueOrder();
     },
-    book() {
-      var user = {
-        subject: "Table Talk Request",
-        id: this.currentUser.uid,
-        email: this.currentUser.email,
-        number: this.userProfile.number,
-        talkAnswers: this.userProfile.talkAnswers,
-        activityAnswers: this.userProfile.activityAnswers
-      };
-      user.address = this.userProfile.addresses;
-
-      var msg = JSON.stringify(user)
-        .replace(/{/g, "\n{")
-        .replace(/,/g, ",\n");
-      emailjs.send(service_id, template_id, { message_html: msg }, user_id);
-
-      this.booked = true;
+    continueOrder() {
+      var answers = this.userProfile.talkAnswers;
+      this.$store.commit("cart/saveAnswersToOrder", answers);
+      this.$router.push("/check-out");
     }
   },
-  computed: {
-    ...mapState("user", ["currentUser", "userProfile"]),
-    done() {
-      try {
-        return this.userProfile.talkAnswers != undefined;
-      } catch (TypeError) {
-        return false;
-      }
-    }
+  computed: mapState("user", ["userProfile"]),
+  beforeRouteEnter(to, from, next) {
+    if (this.userProfile.talkAnswers) this.continueOrder();
+    else next();
   }
 };
 </script>

@@ -14,11 +14,7 @@
         <v-stepper-items>
           <v-stepper-content step="1">
             <h2>My Cart</h2>
-            <OrderItem
-              v-for="order in orders"
-              :key="order.item.id + order.dates.start"
-              :order="order"
-            />
+            <OrderItem :order="order" />
           </v-stepper-content>
 
           <v-stepper-content step="2">
@@ -31,7 +27,7 @@
               </v-col>
             </v-row>
             <h3>Address</h3>
-            <p>Select the address you wish to receive the item at</p>
+            <p>Select the address you wish to receive your order at</p>
             <v-row>
               <v-col
                 cols="6"
@@ -87,7 +83,7 @@
 import emailjs from "emailjs-com";
 import { service_id, template_id, user_id } from "~/emailjsConfig";
 import { db } from "~/plugins/firebase";
-import { mapState, mapMutations } from "vuex";
+import { mapState } from "vuex";
 import OrderItem from "~/components/OrderItem";
 import AddAddressDialog from "~/components/AddAddressDialog";
 import UpdateNumber from "~/components/UpdateNumber";
@@ -104,9 +100,8 @@ export default {
   }),
   computed: {
     ...mapState("user", ["currentUser", "userProfile"]),
-    ...mapState("cart", ["orders"])
+    ...mapState("cart", ["order"])
   },
-  methods: mapMutations("cart", ["removeOrder"]),
   watch: {
     userProfile(nv, ov) {
       if (nv.addresses.length !== ov.addresses.length) this.selectedAddress = 0;
@@ -134,7 +129,7 @@ export default {
       this.step++;
     },
     createOrder() {
-      var order = { ...this.orders[0] };
+      var order = { ...this.order };
       order.user = {
         id: this.currentUser.uid,
         email: this.currentUser.email,

@@ -1,7 +1,7 @@
 <template>
   <Loading v-if="!item" />
   <v-container v-else>
-    <h1 v-if="!item.person">{{item.name}}</h1>
+    <h1>{{item.name}}</h1>
     <v-row>
       <v-col cols="12" sm="5">
         <div class="white pa-1 elevation-3">
@@ -18,17 +18,15 @@
             <!-- <span class="secondary--text">({{item.orders}} orders)</span> -->
           </div>
         </div>
-        <p v-if="item.person" class="mt-3 ml-2">Person verified by rentaleasy</p>
       </v-col>
       <v-col>
-        <h2 v-if="!item.person">Details</h2>
-        <h2 v-else>Bio</h2>
+        <h2>Details</h2>
         <p class="body-2">{{item.details}}</p>
         <v-divider />
-        <h2 v-if="!item.person">Rent Now</h2>
+        <h2 v-if="!item.isActivity">Rent Now</h2>
         <h2 v-else>Book Now</h2>
         <div class="grey lighten-2 mt-2 pa-2">
-          <div class="d-flex justify-space-between" v-if="!item.person">
+          <div class="d-flex justify-space-between" v-if="!item.isActivty">
             <div
               class="grey lighten-4 pa-4 ma-2 text-center flex-grow-1"
               v-for="priceLabel in priceLabels"
@@ -40,19 +38,15 @@
             </div>
           </div>
 
-          <div class="d-flex justify-space-between" v-if="item.person">
-            <div
-              class="grey lighten-4 pa-4 ma-2 text-center flex-grow-1"
-              v-for="(price, priceLabel) in personPrices"
-              :key="priceLabel"
-            >
-              <span class="headline">₹{{price}}</span>
+          <div v-else>
+            <div class="grey lighten-4 pa-4 ma-2 text-center flex-grow-1">
+              <span class="headline">₹{{item.price}}</span>
               <br />
-              <span class="text-capitalize">{{priceLabel}}</span>
+              <span class="text-capitalize">per session</span>
             </div>
           </div>
 
-          <div class="mx-4 mt-6 mb-2" v-if="!item.person">
+          <div class="mx-4 mt-6 mb-2" v-if="!item.isActivity">
             <DatePicker :dates.sync="dates" :blockedDates="item.blockedDates" />
             <v-btn
               block
@@ -67,53 +61,17 @@
             </v-btn>
           </div>
 
-          <div class="mx-4 mt-6 mb-2" v-if="item.person">
-            <v-menu
-              ref="menu"
-              v-model="person.menu"
-              :close-on-content-click="false"
-              :close-on-click="false"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="person.date"
-                  label="Select booking date"
-                  prepend-icon="mdi-calendar-range"
-                  readonly
-                  v-on="on"
-                ></v-text-field>
-              </template>
-              <v-date-picker v-model="person.date" no-title scrollable>
-                <v-spacer></v-spacer>
-                <v-btn text color="red" @click="person.menu = false">Cancel</v-btn>
-                <v-btn text color="green" @click="person.menu = false">OK</v-btn>
-              </v-date-picker>
-            </v-menu>
-
-            <v-row>
-              <v-col>
-                <v-autocomplete
-                  label="Booking duration"
-                  required
-                  :items="['30 mins', '45 mins', '60 mins']"
-                  v-model="person.duration"
-                ></v-autocomplete>
-              </v-col>
-              <v-col>
-                <v-text-field
-                  v-model="person.startTime"
-                  required
-                  label="Time of booking (approximate)"
-                  hint="eg. 3pm"
-                  persistent-hint
-                ></v-text-field>
-              </v-col>
-            </v-row>
-
-            <v-btn block tile depressed color="primary" class="mt-4" @click="rent">Book</v-btn>
+          <div class="mx-4 mt-6 mb-2" v-if="item.isActivity">
+            <SingleDatePicker :date.sync="dates[0]" />
+            <v-btn
+              block
+              tile
+              depressed
+              color="primary"
+              class="mt-4"
+              @click="book"
+              :disabled="!dates[0]"
+            >Book</v-btn>
           </div>
         </div>
         <br />
@@ -122,36 +80,33 @@
         <Reviews :itemID="item.id" />
       </v-col>
     </v-row>
+    <AddCompanionDialog v-if="showDialog" @close="showDialog=false" />
   </v-container>
 </template>
 <script>
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { db } from "~/plugins/firebase";
-import DatePicker from "~/components/DatePicker";
 import Loading from "~/components/Loading";
 import Reviews from "~/components/ReviewComponents/Reviews";
 import BlurredThumb from "~/components/BlurredThumb";
 import dateMethods from "~/mixins/dateMethods";
 
 export default {
-  components: { Loading, DatePicker, Reviews, BlurredThumb },
+  components: {
+    Loading,
+    Reviews,
+    BlurredThumb,
+    DatePicker: () => import("~/components/DatePicker"),
+    SingleDatePicker: () => import("~/components/SingleDatePicker"),
+    AddCompanionDialog: () => import("~/components/AddCompanionDialog")
+  },
   data: () => ({
     item: null,
     loading: false,
     priceLabels: ["daily", "weekly", "monthly"],
-    personPrices: {
-      "30 mins": 89,
-      "45 mins": 100,
-      "60 mins": 120
-    },
-    dates: [],
-    person: {
-      menu: false,
-      duration: null,
-      date: null,
-      startTime: null
-    }
+    dates: [null],
+    showDialog: false
   }),
   mixins: [dateMethods],
   methods: {
@@ -176,43 +131,50 @@ export default {
       price += duration * this.item.prices.daily;
       return price;
     },
-    rent() {
+    setOrder() {
+      if (!this.$store.state.user.currentUser)
+        this.$router.push({
+          name: "auth",
+          query: {
+            rdr: `/items/${this.item.id}`,
+            msg: "Please sign in to order"
+          }
+        });
+
       var item = this.item;
       var order = {
         item: {
-          id: item.id
+          id: item.id,
+          name: item.name,
+          thumb: item.thumb,
+          isActivity: item.isActivity
         }
       };
-      if (!this.item.person) {
-        order.item.name = item.name;
+      if (!this.item.isActivity) {
         order.dates = {
           start: this.dates[0],
           end: this.dates[1]
         };
         order.price = this.calculatePrice();
-        order.item.thumb = item.thumb;
         order.item.owner = item.owner;
         order.item.safety = item.safety;
       } else {
-        order.item.name = this.$route.query.cat;
-        order.dates = this.person.date;
-        order.duration = this.person.duration;
-        order.startTime = this.person.startTime;
-        order.price = this.personPrices[this.person.duration];
-        order.person = item.name;
+        order.date = this.dates[0];
+        order.price = this.item.price;
       }
-
       this.$store.dispatch("cart/addOrder", order);
-      if (this.$store.state.user.currentUser)
-        this.$router.push({ name: "check-out" });
-      else
-        this.$router.push({
-          name: "auth",
-          query: {
-            rdr: "/check-out",
-            msg: "Please sign in to continue your order"
-          }
-        });
+    },
+    rent() {
+      this.setOrder();
+      this.$router.push({ name: "check-out" });
+    },
+    book() {
+      this.setOrder();
+      if (this.item.category == "Table Talk") {
+        this.$router.push("/questions-talk");
+      } else {
+        this.showDialog = true;
+      }
     }
   },
   created() {

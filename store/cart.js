@@ -1,22 +1,24 @@
 export const state = () => ({
-  orders: [],
+  order: null
 });
 
 export const mutations = {
   addOrder: (state, order) => {
-    state.orders = state.orders.concat(order);
+    state.order = order;
   },
-  removeOrder: (state, itemID) => {
-    state.orders = state.orders.filter(order => order.item.id !== itemID);
+  addPersonCharge: state => {
+    state.order.price += 100;
+  },
+  saveAnswersToOrder: (state, answers) => {
+    state.order.answers = answers;
   },
   clearCart: state => {
-    state.orders = [];
-  },
+    state.order = null;
+  }
 };
 
 export const actions = {
   addOrder: ({ commit }, order) => {
-    commit("removeOrder", order.item.id);
     commit("addOrder", order);
-  },
+  }
 };

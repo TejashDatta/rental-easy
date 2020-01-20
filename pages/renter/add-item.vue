@@ -107,7 +107,8 @@ export default {
         votes: 0
       },
       show: false,
-      addedOn: firebase.firestore.FieldValue.serverTimestamp()
+      addedOn: firebase.firestore.FieldValue.serverTimestamp(),
+      isActivity: false
     },
     imgSrc: null,
     uploading: false,

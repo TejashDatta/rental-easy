@@ -3,30 +3,23 @@
     <v-card outlined class="zoom d-flex flex-column">
       <div class="position: relative;">
         <div class="shadow-heading subtitle-1 text-center px-2 pt-1 pb-8">
-          <nuxt-link :to="link" class="white--text" v-if="!item.person">
+          <nuxt-link :to="link" class="white--text">
             <strong v-if="item.name == 'Table Talk'">NEW!</strong>
             {{ item.name }}
-          </nuxt-link>
-          <nuxt-link :to="link" class="white--text" v-else>
-            <div class="d-flex justify-space-between">
-              <div>{{ item.person.age }}</div>
-            </div>
           </nuxt-link>
         </div>
         <BlurredThumb :thumb="item.thumb" :full="item.photo" />
       </div>
-      <v-card-text class="black--text" v-if="item.category !== 'Activity Sessions'">
+      <v-card-text class="black--text">
         Starting at
-        <strong v-if="item.person">₹89 for 30 mins</strong>
-        <strong v-else>₹{{ item.prices.daily }}</strong>
+        <strong v-if="!item.isActivity">₹{{ item.prices.daily }}</strong>
+        <strong v-else>₹{{ item.price }}</strong>
       </v-card-text>
     </v-card>
   </nuxt-link>
 </template>
 <script>
 import BlurredThumb from "~/components/BlurredThumb";
-import { mapState } from "vuex";
-import { activities } from "~/constants";
 export default {
   props: {
     item: {
@@ -36,33 +29,11 @@ export default {
   },
   components: { BlurredThumb },
   computed: {
-    ...mapState("user", ["currentUser", "userProfile"]),
     link() {
-      if (activities.includes(this.item.name) && !this.currentUser)
-        return {
-          name: "auth",
-          query: { rdr: `/items/?cat=${this.item.category}` }
-        };
-      if (this.item.name == "Table Talk")
-        return {
-          name: "questions-talk"
-        };
-      if (
-        activities.includes(this.item.name) &&
-        !this.userProfile.activityAnswers
-      )
-        return {
-          name: "questions-activity",
-          query: { rdr: `/items/?cat=${this.item.name}` }
-        };
-      if (this.item.category == "Activity Sessions")
-        return { name: "items", query: { cat: this.item.name } };
-      else
-        return {
-          name: "items-id",
-          params: { id: this.item.id },
-          query: { cat: this.$route.query.cat }
-        };
+      return {
+        name: "items-id",
+        params: { id: this.item.id }
+      };
     }
   }
 };

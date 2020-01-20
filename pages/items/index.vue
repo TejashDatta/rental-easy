@@ -19,7 +19,7 @@
           color="primary"
         >Show More</v-btn>
       </div>
-      <BecomeParticipant v-if="category == 'Activity Sessions' || activities.includes(category)" />
+      <BecomeParticipant v-if="category == 'Activity Sessions'" />
     </div>
   </v-container>
 </template>
@@ -27,7 +27,6 @@
 import Loading from "~/components/Loading";
 import Item from "~/components/Item";
 import { db } from "~/plugins/firebase";
-import { activities } from "~/constants";
 export default {
   components: {
     Loading,
@@ -41,8 +40,7 @@ export default {
     loading: false,
     canShowMore: true,
     limit: 20,
-    q: null,
-    activities
+    q: null
   }),
   methods: {
     loadCategory() {
@@ -53,27 +51,18 @@ export default {
         .where("show", "==", true)
         .limit(this.limit);
       if (this.category !== "All")
-        if (activities.includes(this.category))
-          this.q = this.q.where("activities", "array-contains", this.category);
-        else this.q = this.q.where("category", "==", this.category);
+        this.q = this.q.where("category", "==", this.category);
       this.nextPage();
     },
     nextPage() {
       this.loading = true;
-      var t_items;
       this.q.get().then(snap => {
-        t_items = this.items.concat(
+        this.items = this.items.concat(
           snap.docs.map(doc => ({ ...doc.data(), id: doc.id }))
         );
         this.loading = false;
         if (snap.docs.length < this.limit) this.canShowMore = false;
         else this.q = this.q.startAfter(snap.docs[snap.docs.length - 1]);
-
-        if (activities.includes(this.category)) {
-          this.canShowMore = false;
-          var shuffled = t_items.sort(() => 0.5 - Math.random());
-          this.items = shuffled.slice(0, 2);
-        } else this.items = t_items;
       });
     }
   },

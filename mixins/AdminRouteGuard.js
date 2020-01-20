@@ -2,7 +2,12 @@ import { auth } from "~/plugins/firebase";
 
 export default {
   beforeRouteEnter(to, from, next) {
-    if (auth.currentUser) {
+    var admins = [
+      "tejashdatta@gmail.com",
+      "inteshabnehal@gmail.com",
+      "shreshtha.sarkar5@gmail.com"
+    ];
+    if (auth.currentUser && admins.includes(auth.currentUser.email)) {
       next();
       // auth.currentUser.getIdTokenResult().then(idTokenResult => {
       //   if (!!idTokenResult.claims.admin) {
@@ -12,5 +17,5 @@ export default {
       //   }
       // });
     } else next("/auth");
-  },
+  }
 };

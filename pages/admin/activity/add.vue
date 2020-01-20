@@ -5,7 +5,11 @@
       <v-row>
         <v-col cols="12" sm="6">
           <h2>Activity details</h2>
-          <v-text-field label="Activity Name" required v-model="item.name" :rules="nameRules"></v-text-field>
+          <v-text-field label="Activity Name" required v-model="item.name"></v-text-field>
+          <v-text-field required v-model="item.price">
+            <span slot="prepend" class="mt-1">₹</span>
+            <span slot="label" class="text-capitalize">Activity price per session</span>
+          </v-text-field>
         </v-col>
         <v-col cols="12" sm="6">
           <h3 class="mb-2">Add a Picture</h3>
@@ -23,13 +27,7 @@
             </v-img>
           </div>
           <div class="d-flex justify-center mt-4">
-            <v-btn
-              :disabled="!valid || !item.photo"
-              :loading="loading"
-              large
-              color="primary"
-              @click="addItem"
-            >Add Item</v-btn>
+            <v-btn :loading="loading" large color="primary" @click="addItem">Add Item</v-btn>
           </div>
         </v-col>
       </v-row>
@@ -55,38 +53,22 @@ export default {
       photo: null,
       thumb: null,
       show: true,
-      addedOn: firebase.firestore.FieldValue.serverTimestamp()
+      addedOn: firebase.firestore.FieldValue.serverTimestamp(),
+      prices: null,
+      isActivity: true
     },
     imgSrc: null,
     uploading: false,
-    loading: false,
-    required: [v => !!v || "Required"],
-    nameRules: [
-      v => !!v || "Required",
-      v => (v && v.length <= 30) || "Must be less than 30 characters"
-    ],
-    detailsRules: [
-      v => !!v || "Required",
-      v => (v && v.length <= 1000) || "Must be less than 1000 characters"
-    ],
-    priceRules: [
-      v => !!v || "Required",
-      v => !isNaN(v) || "Must be a number",
-      v => v >= 0 || "Cannot be negative",
-      v => v % 1 == 0 || "No decimal figures"
-    ]
+    loading: false
   }),
   methods: {
     addItem() {
       this.loading = true;
       db.collection("items")
-        .add({
-          ...this.item,
-          owner: this.currentUser.uid
-        })
+        .add(this.item)
         .then(docRef => {
+          // this.addToAlgolia(docRef.id, this.item);
           this.$router.push("/admin");
-          this.addToAlgolia(docRef.id, this.item);
         });
     },
     selectPicture(e) {

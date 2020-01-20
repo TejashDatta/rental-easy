@@ -1,8 +1,5 @@
 <template>
-  <v-container v-if="loading">
-    <Loading msg="Finding ideal matches for you..." />
-  </v-container>
-  <v-container v-else>
+  <v-container>
     <h2>Tell us about yourself</h2>
     <p>Answer the questions below to help us find the people most suitable for you.</p>
     <v-row>
@@ -27,12 +24,9 @@
   </v-container>
 </template>
 <script>
-import AuthGuardMixin from "~/mixins/AuthGuardMixin";
-import Loading from "~/components/Loading";
+import { mapState } from "vuex";
 
 export default {
-  mixins: [AuthGuardMixin],
-  components: { Loading },
   data: () => ({
     questions: [
       ["Netflix", "YouTube"],
@@ -44,17 +38,23 @@ export default {
       ["TV", "Book"],
       ["Casuals", "Formals"]
     ],
-    answers: new Array(8),
-    loading: false
+    answers: new Array(8)
   }),
   methods: {
     submit() {
       this.$store.dispatch("user/saveActivityAnswers", this.answers);
-      this.loading = true;
-      setTimeout(() => {
-        this.$router.push(this.$route.query.rdr);
-      }, 3000);
+      this.continueOrder();
+    },
+    continueOrder() {
+      var answers = this.userProfile.activityAnswers;
+      this.$store.commit("cart/saveAnswersToOrder", answers);
+      this.$router.push("/check-out");
     }
+  },
+  computed: mapState("user", ["userProfile"]),
+  beforeRouteEnter(to, from, next) {
+    if (this.userProfile.activityAnswers) this.continueOrder();
+    else next();
   }
 };
 </script>
