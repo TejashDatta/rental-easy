@@ -26,7 +26,7 @@
         <h2 v-if="!item.isActivity">Rent Now</h2>
         <h2 v-else>Book Now</h2>
         <div class="grey lighten-2 mt-2 pa-2">
-          <div class="d-flex justify-space-between" v-if="!item.isActivty">
+          <div class="d-flex justify-space-between" v-if="!item.isActivity">
             <div
               class="grey lighten-4 pa-4 ma-2 text-center flex-grow-1"
               v-for="priceLabel in priceLabels"
@@ -61,7 +61,7 @@
             </v-btn>
           </div>
 
-          <div class="mx-4 mt-6 mb-2" v-if="item.isActivity">
+          <div class="mx-4 mt-6 mb-2" v-else>
             <SingleDatePicker :date.sync="dates[0]" />
             <v-btn
               block
@@ -170,7 +170,7 @@ export default {
     },
     book() {
       this.setOrder();
-      if (this.item.category == "Table Talk") {
+      if (["Table Talk", "Shopping"].includes(this.item.category)) {
         this.$router.push("/questions-talk");
       } else {
         this.showDialog = true;

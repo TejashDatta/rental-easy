@@ -10,6 +10,15 @@
             <span slot="prepend" class="mt-1">₹</span>
             <span slot="label" class="text-capitalize">Activity price per session</span>
           </v-text-field>
+          <v-textarea
+            label="Details"
+            auto-grow
+            clearable
+            counter="1000"
+            rows="3"
+            v-model="item.details"
+            required
+          ></v-textarea>
         </v-col>
         <v-col cols="12" sm="6">
           <h3 class="mb-2">Add a Picture</h3>
@@ -49,12 +58,17 @@ export default {
     valid: false,
     item: {
       name: null,
+      details: '',
       category: "Activity Sessions",
+      price: null,
       photo: null,
       thumb: null,
+      rating: {
+        total: 0,
+        votes: 0
+      },
       show: true,
       addedOn: firebase.firestore.FieldValue.serverTimestamp(),
-      prices: null,
       isActivity: true
     },
     imgSrc: null,
