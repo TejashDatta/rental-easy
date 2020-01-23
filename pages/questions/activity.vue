@@ -52,9 +52,8 @@ export default {
     }
   },
   computed: mapState("user", ["userProfile"]),
-  beforeRouteEnter(to, from, next) {
+  created() {
     if (this.userProfile.activityAnswers) this.continueOrder();
-    else next();
   }
 };
 </script>

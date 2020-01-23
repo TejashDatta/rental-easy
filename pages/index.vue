@@ -53,7 +53,7 @@ export default {
   data: () => ({
     slideLinks: [
       "/items",
-      "/items?cat=Laptops",
+      "/items?cat=Electronic Appliances",
       "/items?cat=Activity Sessions",
       "/items?cat=Books",
       "/items?cat=Games",

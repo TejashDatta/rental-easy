@@ -74,6 +74,7 @@
       </v-list>
 
       <template v-slot:append>
+        <div class="pa-1 text-center body-2">Available exclusively in Kolkata</div>
         <v-divider />
         <div class="pa-2">
           <span class="grey--text text-darken-2 text-center d-block text-center mb-2">Contact us</span>

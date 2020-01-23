@@ -11,6 +11,7 @@
           </a>
         </span>
         <span class="white--text caption">
+          <span class="mr-3">Available exclusively in Kolkata</span>
           <nuxt-link to="/renter/add-item" class="white--text">
             <v-icon small color="white" class="mr-1">mdi-view-grid-plus</v-icon>List My Item
           </nuxt-link>

@@ -7,7 +7,7 @@ export const mutations = {
     state.order = order;
   },
   addPersonCharge: state => {
-    state.order.price += 100;
+    state.order.price = Number(state.order.price) + 100;
   },
   saveAnswersToOrder: (state, answers) => {
     state.order.answers = answers;

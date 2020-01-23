@@ -41,7 +41,7 @@ export default {
   },
   watch: {
     dates() {
-      this.$emit("update:dates", this.unsavedDates);
+      this.$emit("update:dates", this.unsavedDates.sort());
     }
   },
   data: () => ({

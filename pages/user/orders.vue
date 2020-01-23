@@ -2,7 +2,7 @@
   <Loading v-if="loading" />
   <v-container v-else>
     <h1>My Orders</h1>
-    <OrderItem v-for="order in orders" :key="order.item.id + order.dates.start" :order="order" />
+    <OrderItem v-for="order in orders" :key="order.id" :order="order" />
   </v-container>
 </template>
 <script>
@@ -25,7 +25,7 @@ export default {
       .get()
       .then(snap => {
         this.loading = false;
-        this.orders = snap.docs.map(doc => doc.data());
+        this.orders = snap.docs.map(doc => ({ ...doc.data(), id: doc.id }));
       });
   }
 };

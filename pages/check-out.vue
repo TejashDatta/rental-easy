@@ -63,11 +63,13 @@
       <v-card>
         <v-card-title class="subtitle">Order Summary</v-card-title>
         <v-card-text>
-          <v-row v-for="order in orders" :key="order.item.id">
+          <v-row>
             <v-col cols="6">{{ order.item.name }}</v-col>
             <v-col cols="6" class="text-right">₹{{ order.price }}</v-col>
-            <!-- <v-col cols="6">Safety fee</v-col>
-            <v-col cols="6" class="text-right">₹{{ order.item.safety }}</v-col>-->
+          </v-row>
+          <v-row v-if="order.item.safety">
+            <v-col cols="6">Safety fee</v-col>
+            <v-col cols="6" class="text-right">₹{{ order.item.safety }}</v-col>
           </v-row>
           <v-btn block tile depressed color="primary" @click="proceed" :loading="loading">
             <v-icon left>mdi-arrow-right-bold</v-icon>
@@ -133,9 +135,7 @@ export default {
       order.user = {
         id: this.currentUser.uid,
         email: this.currentUser.email,
-        number: this.userProfile.number,
-        talkAnswers: this.userProfile.talkAnswers,
-        activityAnswers: this.userProfile.activityAnswers
+        number: this.userProfile.number
       };
       order.payment = this.payment;
       order.address = this.userProfile.addresses[this.selectedAddress];
@@ -149,8 +149,8 @@ export default {
             .replace(/,/g, ",\n");
           emailjs.send(service_id, template_id, { message_html: msg }, user_id);
 
-          this.$router.push("/user/orders/");
           this.$store.commit("cart/clearCart");
+          this.$router.push("/user/orders/");
         });
     }
   }

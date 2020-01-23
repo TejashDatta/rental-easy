@@ -10,14 +10,14 @@ export default {
   mixins: [AdminRouteGuard],
   created() {
     db.collection("items")
-      .where("category", "==", "person")
       .get()
       .then(snap => {
         snap.docs.forEach(doc => {
           console.log(doc);
-          db.collection("items")
-            .doc(doc.id)
-            .delete();
+          if (doc.data().category != "Activity Sessions")
+            db.collection("items")
+              .doc(doc.id)
+              .update({ isActivity: false });
           // .update({
           //   rating: {
           //     total: 0,

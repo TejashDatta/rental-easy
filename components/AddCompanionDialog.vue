@@ -1,5 +1,5 @@
 <template>
-  <v-dialog persistent>
+  <v-dialog v-model="dialog">
     <v-card>
       <v-card-title class="headline">Request Companion?</v-card-title>
       <v-card-text>
@@ -22,13 +22,14 @@
 <script>
 export default {
   data: () => ({
-    requestCompanion: false
+    requestCompanion: false,
+    dialog: true
   }),
   methods: {
     next() {
       if (this.requestCompanion) {
         this.$store.commit("cart/addPersonCharge");
-        this.$router.push("/questions-activity");
+        this.$router.push("/questions/activity");
       } else this.$router.push("/check-out");
     }
   }

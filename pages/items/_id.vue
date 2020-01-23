@@ -170,8 +170,8 @@ export default {
     },
     book() {
       this.setOrder();
-      if (["Table Talk", "Shopping"].includes(this.item.category)) {
-        this.$router.push("/questions-talk");
+      if (["Table Talk", "Shopping"].includes(this.item.name)) {
+        this.$router.push("/questions/talk");
       } else {
         this.showDialog = true;
       }

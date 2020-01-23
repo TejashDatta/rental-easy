@@ -10,7 +10,7 @@
   >
     <template v-slot:activator="{ on }">
       <v-text-field
-        v-model="dateText"
+        v-model="date"
         label="Select booking date"
         prepend-icon="mdi-calendar-range"
         readonly
@@ -39,7 +39,7 @@ export default {
   },
   watch: {
     date() {
-      this.$emit("update:date", this.unsavedDate);
+      this.$emit("update:date", this.formatDate(this.unsavedDate));
     }
   },
   data: () => ({
@@ -53,7 +53,7 @@ export default {
     },
     dateSelected() {
       this.menu = false;
-      this.$emit("update:date", this.unsavedDate);
+      this.$emit("update:date", this.formatDate(this.unsavedDate));
     },
     allowedDates(date) {
       var dateFuture3 = new Date();
@@ -71,11 +71,6 @@ export default {
     //   }
     //   return true;
     // }
-  },
-  computed: {
-    dateText() {
-      return this.formatDate(this.date);
-    }
   },
   mixins: [dateMethods]
 };
