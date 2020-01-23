@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container v-if="!added">
     <h1>Add Item</h1>
     <v-form v-model="valid">
       <v-row>
@@ -73,6 +73,10 @@
       </v-row>
     </v-form>
   </v-container>
+  <v-container v-else>
+    <h1>Item Added</h1>
+    <p>Thank you for adding your item to rentaleasy. It'll become available for others to rent out as soon as we verify it.</p>
+  </v-container>
 </template>
 <script>
 import emailjs from "emailjs-com";
@@ -127,7 +131,8 @@ export default {
       v => !isNaN(v) || "Must be a number",
       v => v >= 0 || "Cannot be negative",
       v => v % 1 == 0 || "No decimal figures"
-    ]
+    ],
+    added: false
   }),
   methods: {
     addItem() {
@@ -148,7 +153,7 @@ export default {
             .replace(/{/g, "\n{")
             .replace(/,/g, ",\n");
           emailjs.send(service_id, template_id, { message_html: msg }, user_id);
-          this.$router.push(`/items/${docRef.id}`);
+          this.added = true;
         });
     },
     selectPicture(e) {

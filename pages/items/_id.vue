@@ -91,6 +91,7 @@ import Loading from "~/components/Loading";
 import Reviews from "~/components/ReviewComponents/Reviews";
 import BlurredThumb from "~/components/BlurredThumb";
 import dateMethods from "~/mixins/dateMethods";
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -109,6 +110,7 @@ export default {
     showDialog: false
   }),
   mixins: [dateMethods],
+  computed: mapState("user", ["currentUser"]),
   methods: {
     getItem() {
       const id = this.$route.params.id;
@@ -132,7 +134,7 @@ export default {
       return price;
     },
     setOrder() {
-      if (!this.$store.state.user.currentUser) {
+      if (!this.currentUser) {
         this.$router.push({
           name: "auth",
           query: {
