@@ -80,7 +80,7 @@
         <Reviews :itemID="item.id" />
       </v-col>
     </v-row>
-    <AddCompanionDialog v-if="showDialog" @close="showDialog=false" />
+    <AddCompanionDialog :dialog.sync="showDialog" />
   </v-container>
 </template>
 <script>
@@ -132,7 +132,7 @@ export default {
       return price;
     },
     setOrder() {
-      if (!this.$store.state.user.currentUser)
+      if (!this.$store.state.user.currentUser) {
         this.$router.push({
           name: "auth",
           query: {
@@ -140,6 +140,7 @@ export default {
             msg: "Please sign in to order"
           }
         });
+      }
 
       var item = this.item;
       var order = {

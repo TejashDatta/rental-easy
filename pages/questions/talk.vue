@@ -29,8 +29,10 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import AuthGuardMixin from "~/mixins/AuthGuardMixin";
 
 export default {
+  mixins: [AuthGuardMixin],
   data: () => ({
     questions: [
       { q: "Looking for:", options: ["Males", "Females", "Both"] },

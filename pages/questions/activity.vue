@@ -25,8 +25,10 @@
 </template>
 <script>
 import { mapState } from "vuex";
+import AuthGuardMixin from "~/mixins/AuthGuardMixin";
 
 export default {
+  mixins: [AuthGuardMixin],
   data: () => ({
     questions: [
       ["Netflix", "YouTube"],

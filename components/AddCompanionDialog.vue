@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog">
+  <v-dialog v-model="dialog" hide-overlay max-width="400">
     <v-card>
       <v-card-title class="headline">Request Companion?</v-card-title>
       <v-card-text>
@@ -13,7 +13,7 @@
 
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="red" text @click="$emit('close')">Cancel</v-btn>
+        <v-btn color="red" text @click="$emit('update:dialog', false)">Cancel</v-btn>
         <v-btn color="primary" text @click="next">Next</v-btn>
       </v-card-actions>
     </v-card>
@@ -21,9 +21,14 @@
 </template>
 <script>
 export default {
+  props: {
+    dialog: {
+      type: Boolean,
+      required: true
+    }
+  },
   data: () => ({
-    requestCompanion: false,
-    dialog: true
+    requestCompanion: false
   }),
   methods: {
     next() {
