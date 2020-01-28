@@ -10,8 +10,7 @@
         <h3 class="white--text text-center my-3">About Us</h3>
         <p
           class="grey--text text-center caption"
-        >We believe in sustainability and sharing goods. Reducing consumption is a good way to start the millenial life. Rent the items which are resting on your shelves. Share your ideas with others and meet new people while trying out new things. 
-</p>
+        >We believe in sustainability and sharing goods. Reducing consumption is a good way to start the millennial life. Rent the items which are resting on your shelves. Share your ideas with others and meet new people while trying out new things.</p>
 
         <v-row justify="space-around" no-gutters>
           <v-btn

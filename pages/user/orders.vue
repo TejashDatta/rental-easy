@@ -2,6 +2,7 @@
   <Loading v-if="loading" />
   <v-container v-else>
     <h1>My Orders</h1>
+    <p>{{$route.query.msg}}</p>
     <OrderItem v-for="order in orders" :key="order.id" :order="order" />
   </v-container>
 </template>

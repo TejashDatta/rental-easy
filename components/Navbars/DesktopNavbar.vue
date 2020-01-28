@@ -3,8 +3,8 @@
     <v-container class="pt-1 pb-0">
       <div class="d-flex justify-space-between align-center">
         <span class="caption white--text">
-          <a href="tel:+918420162430" class="white--text">
-            <v-icon small color="white" class="mr-1">mdi-phone</v-icon>+91 8420162430
+          <a href="tel:+918240903323" class="white--text">
+            <v-icon small color="white" class="mr-1">mdi-phone</v-icon>+91 8240903323
           </a> /
           <a href="mailto:contact@rentaleasy.in" class="white--text">
             <v-icon small color="white" class="mr-1">mdi-email</v-icon>contact@rentaleasy.in

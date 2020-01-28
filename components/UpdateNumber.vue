@@ -9,7 +9,12 @@
         </v-text-field>
       </v-col>
       <v-col>
-        <v-btn color="green" text @click="updateNumber(number); snackbar=true">Save</v-btn>
+        <v-btn
+          color="green"
+          text
+          :disabled="!valid"
+          @click="updateNumber(number); snackbar=true; $emit('numberSaved')"
+        >Save</v-btn>
       </v-col>
     </v-row>
     <v-snackbar v-model="snackbar" color="green lighten-4" top :timeout="2000">

@@ -13,8 +13,8 @@ exports.incRating = functions.firestore
       .collection("items")
       .doc(context.params.itemID)
       .update({
-        "ratings.total": FieldValue.increment(review.rating),
-        "ratings.votes": FieldValue.increment(1)
+        "rating.total": FieldValue.increment(review.rating),
+        "rating.votes": FieldValue.increment(1)
       });
   });
 
@@ -26,8 +26,8 @@ exports.decRating = functions.firestore
       .collection("items")
       .doc(context.params.itemID)
       .update({
-        "ratings.total": FieldValue.increment(-review.rating),
-        "ratings.votes": FieldValue.increment(-1)
+        "rating.total": FieldValue.increment(-review.rating),
+        "rating.votes": FieldValue.increment(-1)
       });
   });
 

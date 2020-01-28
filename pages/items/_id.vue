@@ -18,6 +18,7 @@
             <!-- <span class="secondary--text">({{item.orders}} orders)</span> -->
           </div>
         </div>
+        <FAQCard v-if="item.isActivity && $vuetify.breakpoint.smAndUp" :activityName="item.name" />
       </v-col>
       <v-col>
         <h2>Details</h2>
@@ -78,6 +79,7 @@
         <v-divider />
         <h2 class="mb-2">Reviews</h2>
         <Reviews :itemID="item.id" />
+        <FAQCard v-if="item.isActivity && $vuetify.breakpoint.xsOnly" :activityName="item.name" />
       </v-col>
     </v-row>
     <AddCompanionDialog :dialog.sync="showDialog" />
@@ -100,7 +102,8 @@ export default {
     BlurredThumb,
     DatePicker: () => import("~/components/DatePicker"),
     SingleDatePicker: () => import("~/components/SingleDatePicker"),
-    AddCompanionDialog: () => import("~/components/AddCompanionDialog")
+    AddCompanionDialog: () => import("~/components/AddCompanionDialog"),
+    FAQCard: () => import("~/components/FAQCard")
   },
   data: () => ({
     item: null,

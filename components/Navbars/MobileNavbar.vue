@@ -78,8 +78,8 @@
         <v-divider />
         <div class="pa-2">
           <span class="grey--text text-darken-2 text-center d-block text-center mb-2">Contact us</span>
-          <a href="tel:+918420162430" class="primary--text">
-            <v-icon small color="primary" class="mr-1">mdi-phone</v-icon>+91 8420162430
+          <a href="tel:+918240903323" class="primary--text">
+            <v-icon small color="primary" class="mr-1">mdi-phone</v-icon>+91 8240903323
           </a>
           <br />
           <a href="mailto:contact@rentaleasy.in" class="primary--text">

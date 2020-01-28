@@ -1,12 +1,12 @@
 <template>
-  <v-row justify="center" class="px-2">
+  <v-row justify="center" class="px-2" v-if="order">
     <v-spacer></v-spacer>
     <v-col cols="12" md="6">
       <v-stepper v-model="step" alt-labels class="elevation-2">
         <v-stepper-header class="elevation-0">
           <v-stepper-step :complete="true" editable step="1">Cart</v-stepper-step>
           <v-divider></v-divider>
-          <v-stepper-step :complete="step > 1" :editable="step > 1" step="2">Delivery Address</v-stepper-step>
+          <v-stepper-step :complete="step > 1" :editable="step > 1" step="2">Billing Address</v-stepper-step>
           <v-divider></v-divider>
           <v-stepper-step step="3">Payment</v-stepper-step>
         </v-stepper-header>
@@ -18,16 +18,16 @@
           </v-stepper-content>
 
           <v-stepper-content step="2">
-            <h2 class="mb-4">Delivery and Contact Information</h2>
+            <h2 class="mb-4">Contact Information</h2>
             <p class="red--text">{{ error }}</p>
             <h3>Contact Number</h3>
             <v-row>
               <v-col cols="12" sm="6">
-                <UpdateNumber />
+                <UpdateNumber @numberSaved="error=''" />
               </v-col>
             </v-row>
             <h3>Address</h3>
-            <p>Select the address you wish to receive your order at</p>
+            <p>Select a billing address</p>
             <v-row>
               <v-col
                 cols="6"
@@ -51,10 +51,16 @@
           </v-stepper-content>
           <v-stepper-content step="3">
             <h2 class="mb-4">Payment</h2>
-            <v-radio-group v-model="payment" column mandatory required class="ml-2">
-              <v-radio label="Cash on Delivery" value="Cash"></v-radio>
-              <v-radio label="GPay/PayTM on Delivery" value="GPay/PayTM"></v-radio>
+            <v-radio-group v-model="payment" column mandatory required class="ml-2 black--text">
+              <v-radio label="Pay on Delivery (Cash/PayTM/UPI/GPay)" value="Delivery"></v-radio>
+              <v-radio label="UPI/PayTM Online" value="UPI Online"></v-radio>
             </v-radio-group>
+            <div v-if="payment === 'UPI Online'" class="d-flex justify-center">
+              <div style="max-width: 400px" class="text-center">
+                <v-img contain max-height="200" :src="require('~/assets/payment_qr.jpeg')" />
+                <span>Please pay the required amount through PayTM or any other BHIM UPI app by scanning the QR code.</span>
+              </div>
+            </div>
           </v-stepper-content>
         </v-stepper-items>
       </v-stepper>
@@ -116,11 +122,11 @@ export default {
     proceed() {
       if (this.step == 2) {
         if (!this.userProfile.number) {
-          this.error += "Please enter a valid contact number.";
+          this.error = "Please enter a valid contact number.";
           return;
         }
         if (!this.userProfile.addresses.length) {
-          this.error += "Please add a delivery address.";
+          this.error = "Please add an address.";
           return;
         }
       } else if (this.step == 3) {
@@ -150,9 +156,14 @@ export default {
           emailjs.send(service_id, template_id, { message_html: msg }, user_id);
 
           this.$store.commit("cart/clearCart");
-          this.$router.push("/user/orders/");
+          this.$router.push(
+            "/user/orders/?msg=Thank you for your support. We will reach out to you regarding your pending order shortly."
+          );
         });
     }
+  },
+  created() {
+    if (!this.order) this.$router.push("/");
   }
 };
 </script>

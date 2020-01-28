@@ -1,10 +1,10 @@
 <template>
-  <v-dialog v-model="dialog" hide-overlay max-width="400">
+  <v-dialog v-model="dialog" persistent hide-overlay max-width="400">
     <v-card>
-      <v-card-title class="headline">Request Companion?</v-card-title>
+      <v-card-title class="headline">Request Match?</v-card-title>
       <v-card-text>
         Rentaleasy has many verified individuals available to accompany you in your activity.
-        Request a companion for an additional cost of ₹100?
+        Request a match for an additional cost of ₹100?
         <v-radio-group v-model="requestCompanion">
           <v-radio label="Yes (+ ₹100)" :value="true"></v-radio>
           <v-radio label="No" :value="false"></v-radio>

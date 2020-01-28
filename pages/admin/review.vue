@@ -42,8 +42,8 @@ export default {
   methods: {
     add() {
       this.review.date = firebase.firestore.FieldValue.serverTimestamp();
-      this.review.author.id = db
-        .collection(`items/${this.itemId}/reviews`)
+      this.review.author.id += this.review.author.name;
+      db.collection(`items/${this.itemId}/reviews`)
         .doc("dummy" + this.review.author.name)
         .set(this.review)
         .then(() => (this.added = true));

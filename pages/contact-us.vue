@@ -6,7 +6,7 @@
       <a href="mail:contact@rentaleasy.in">contact@rentaleasy.in</a>
       <br />
       <strong>Phone Number:</strong>
-      <a href="tel:+918420162430">+91 8420162430</a>
+      <a href="tel:+918240903323">+91 8240903323</a>
     </p>
   </v-container>
 </template>

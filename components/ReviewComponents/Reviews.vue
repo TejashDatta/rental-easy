@@ -40,7 +40,7 @@ export default {
     reviews: [],
     loading: true,
     q: null,
-    limit: 5,
+    limit: 3,
     canShowMore: true
   }),
   methods: {
